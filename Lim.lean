@@ -5,8 +5,8 @@ open Topology Filter Classical Real
 open Real
 
 theorem tendsto_add_at_top : forall (f g : ℝ → ℝ),
-  Tendsto f atTop atTop → Tendsto g atTop atTop →
-  Tendsto (λ x => f x + g x) atTop atTop := by
+Tendsto f atTop atTop → Tendsto g atTop atTop →
+Tendsto (λ x => f x + g x) atTop atTop := by
 
   /- by után {...} kéne, de ezt helyetesíthetjük egy "behúzással", ami ezután a proof mode-t indítja el, egyébként minden by után "{" -t kérne -/
   intros f g h1 h2
