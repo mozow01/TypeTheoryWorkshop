@@ -1,6 +1,6 @@
 import Mathlib
 
-theorem warmup_3 : ∀ n : ℕ , 7^(2*n+1) + 3^(2*n+1) ≡ 0 [MOD 10] := by
+theorem problem_mod : ∀ n : ℕ , 7^(2*n+1) + 3^(2*n+1) ≡ 0 [MOD 10] := by
 
   intros n
   rw [Nat.pow_add']
