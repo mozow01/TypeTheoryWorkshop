@@ -16,7 +16,7 @@ Then ````my_project/my_project```` and ````my_project/my_project/Basic.lean```` 
 
 If you use VSCode, then **open** the project as a **folder** (my_project) and you have to activate the **Lean4 language extension,** then probably **restart** VSCode for a several times :D
 
-## Theorem Proving in Lean
+## Theorem Proving in Lean4
 
 For a quick introduction see https://leanprover.github.io/theorem_proving_in_lean4/title_page.html .
 
@@ -60,4 +60,6 @@ h\text{ : B}\\
 Tactic **"apply?"** searches for a logical inference rule or a lemma in **Mathlib4** which potencially can prove the goal.
 
 ## Using Mathlib4
+
+
 
