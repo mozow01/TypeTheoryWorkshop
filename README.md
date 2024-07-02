@@ -21,11 +21,12 @@ To check that Mathlib works well, we create a theorem in Basic.lean (clearly, yo
 ````lean
 theorem flipterms : forall A B : Prop, A ∧ B → B ∧ A
 ````
-the standard surface form is
+the standard **surface form** is
 
-: ````theorem name_of_the_theorem : proposition_of_the_theorem````, 
+````theorem name_of_the_theorem : proposition_of_the_theorem := proof_term````, 
 
-however deep in it the meaning is: 
-: ````definition name_of_the_inhabitant : type_of_the_inhabitans_where_it_lives := the_inhabitant````
+however deep in it **the meaning is:**
+
+````definition name_of_the_inhabitant : type_of_the_inhabitans_where_it_lives := the_inhabitant````
 
 
