@@ -61,5 +61,9 @@ Tactic **"apply?"** searches for a logical inference rule or a lemma in **Mathli
 
 ## Using Mathlib4
 
+The main help that Mathlib gives us is the Mathlib tactic apply? and rw?. The former searches for lemmas with the same conclusion pattern that the goal has, the latter searches equation to rewrite the goal in an identical form.
+
+A bit problematic one to search for lemmas by ourselves. However the documentation of Mathlib helps us: https://leanprover-community.github.io/mathlib4_docs/   
+
 
 
