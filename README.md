@@ -18,7 +18,7 @@ If you use VSCode, then **open** the project as a **folder** (my_project) and yo
 
 To check that Mathlib works well, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
 
-````lean4
+````lean
 theorem flipterms : forall A B : Prop, A ∧ B → B ∧ A
 ````
 
