@@ -27,6 +27,15 @@ the standard **surface form** is
 
 however deep in it **the meaning is:**
 
-````definition name_of_the_inhabitant : type_of_the_inhabitans_where_it_lives := the_inhabitant````
+````definition name_of_the_inhabitant : type_of_the_inhabitan_where_it_lives := the_inhabitant````
+
+Here ````the_inhabitant```` is a term of program in Lean4's native **functional** language.
+
+You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms. In the proof mode there are premisses and a goal in the following form: 
+
+$$\dfrac{\begin{matrix}\text{Premiss}1\\ \text{Premiss}1  \\  \vdots \\\text{Premiss}n\end{matrix}}{\vdash \text{Goal}}$$
+
+Tactic **"apply?"** searches for a logical inference rule or a lemma in **Mathlib4** which potencially can prove the goal.
+
 
 
