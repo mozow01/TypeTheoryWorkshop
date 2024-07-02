@@ -1,6 +1,6 @@
 # TypeTheoryWorkshop
 
-## Lean4 
+## Lean4 & Mathlib4
 
 Lean4: https://leanprover-community.github.io/learn.html
 
@@ -14,10 +14,13 @@ lake +leanprover/lean4:nightly-2024-04-24 new my_project math
 
 Then ````my_project/my_project```` and ````my_project/my_project/Basic.lean```` are created, and within it, you can start to programming in Lean4.  
 
-## Mathlib4
+If you use VSCode, then **open** the project as a **folder** (my_project) and you have to activate the **Lean4 language extension,** then probably **restart** VSCode for a several times :D
 
-Mathlob4: https://leanprover-community.github.io/mathlib4_docs/
+To check that Mathlib works well, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
 
+````lean4
+theorem flipterms : forall A B : Prop, A ∧ B → B ∧ A
+````
 
 
 
