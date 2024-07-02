@@ -1,0 +1,20 @@
+def sum_first_n : Nat → Nat
+  | 0 => 0
+  | n + 1 => (n + 1) + sum_first_n n
+
+#eval sum_first_n 10
+
+
+theorem sum_first_n_correct : forall  n : Nat,
+      2 * sum_first_n n = n*(n+1) := by
+  intros n
+  induction n with
+  | zero => {exact rfl}
+  | succ n a => {
+    rw[sum_first_n]
+    rw[Nat.mul_add]
+    rw[a]
+    rw[Nat.mul_comm]
+    rw[Nat.add_comm]
+    rw[Nat.mul_comm]
+    rw[<-Nat.mul_add]}
