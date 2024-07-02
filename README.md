@@ -16,7 +16,11 @@ Then ````my_project/my_project```` and ````my_project/my_project/Basic.lean```` 
 
 If you use VSCode, then **open** the project as a **folder** (my_project) and you have to activate the **Lean4 language extension,** then probably **restart** VSCode for a several times :D
 
-To check that Mathlib works well, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
+## Theorem Proving in Lean
+
+For a quick introduction see https://leanprover.github.io/theorem_proving_in_lean4/title_page.html .
+
+To check that in your Lean4 project Mathlib4 works well, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
 
 ````lean
 theorem flipterms : forall A B : Prop, A ∧ B → B ∧ A
@@ -31,7 +35,7 @@ however deep in it **the meaning is:**
 
 Here ````the_inhabitant```` is a term of program in Lean4's native **functional** language.
 
-You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms semiautomatically. In the proof mode there are premisses and a goal in the following form: 
+You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms in a semiautomated way. In the proof mode there are premisses and a goal in the following form: 
 
 $$\dfrac{\begin{matrix}
 \text{Premiss}1\\ 
@@ -55,5 +59,5 @@ h\text{ : B}\\
 
 Tactic **"apply?"** searches for a logical inference rule or a lemma in **Mathlib4** which potencially can prove the goal.
 
-
+## Using Mathlib4
 
