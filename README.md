@@ -40,6 +40,8 @@ $$\dfrac{\begin{matrix}
 \text{Premiss}n
 \end{matrix}}{\vdash \text{Goal}}$$
 
+If the theorem is in the form "forall A, if B then C", then you can put the conditions A and B into the premmisses by the tactic **"intros".** If you name the contitions then they are going to get names: "intros A B" gives names to them. 
+
 Tactic **"apply?"** searches for a logical inference rule or a lemma in **Mathlib4** which potencially can prove the goal.
 
 
