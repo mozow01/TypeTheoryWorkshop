@@ -11,25 +11,26 @@ theorem sum_first_n_correct : forall  n : Nat,
       2 * sum_first_n n = n*(n+1) := by
   intros n
   induction n with
-  | zero => {exact rfl}
-  | succ n a => {
+  | zero =>
+    exact rfl
+  | succ n a =>
     rw[sum_first_n]
     rw[Nat.mul_add]
     rw[a]
     rw[Nat.mul_comm]
     rw[Nat.add_comm]
     rw[Nat.mul_comm]
-    rw[<-Nat.mul_add]}
+    rw[<-Nat.mul_add]
 
 theorem sum_first_n_correct2 : forall  n : Nat,
       2 * sum_first_n n = n*(n+1) := by
       intros n
       induction n with
-  | zero => {exact rfl}
-  | succ n a => {
+  | zero =>
+    exact rfl
+  | succ n a =>
     rw [sum_first_n]
     -- rw?
     rw [Nat.left_distrib]
     rw [a]
     linarith
-  }
