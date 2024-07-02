@@ -40,10 +40,10 @@ $$\dfrac{\begin{matrix}
 \text{Premiss}n
 \end{matrix}}{\vdash \text{Goal}}$$
 
-If the theorem is in the form "forall A, if B then C", then you can put the conditions A and B into the premmisses by the tactic **"intros".** If you name the contitions then they are going to get names: "intros A B" gives names to them. 
+Here $\vdash$ is the provability or typeability sign, and it is called "turnstyle". If the theorem is in the form "forall A, if B then C", then you can put the conditions A and B into the premmisses by the tactic **"intros".** If you name the contitions then they are going to get names: "intros A B" gives names to them. 
 
 $$
-\vdash \forall \, A \, B \, C\text{ : Prop}, B \to C\quad
+\vdash \forall \text{ } A \text{ } B \text{ } C\text{ : Prop}, B \to C\quad
 \underset{\text{intros A B C h}}{\to} \quad
 \dfrac{\begin{matrix}
 A\text{ : Prop}\\ 
