@@ -1,3 +1,5 @@
+import Mathlib.Tactic.Linarith
+
 def sum_first_n : Nat → Nat
   | 0 => 0
   | n + 1 => (n + 1) + sum_first_n n
@@ -18,3 +20,16 @@ theorem sum_first_n_correct : forall  n : Nat,
     rw[Nat.add_comm]
     rw[Nat.mul_comm]
     rw[<-Nat.mul_add]}
+
+theorem sum_first_n_correct2 : forall  n : Nat,
+      2 * sum_first_n n = n*(n+1) := by
+      intros n
+      induction n with
+  | zero => {exact rfl}
+  | succ n a => {
+    rw [sum_first_n]
+    -- rw?
+    rw [Nat.left_distrib]
+    rw [a]
+    linarith
+  }
