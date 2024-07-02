@@ -31,7 +31,7 @@ however deep in it **the meaning is:**
 
 Here ````the_inhabitant```` is a term of program in Lean4's native **functional** language.
 
-You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms. In the proof mode there are premisses and a goal in the following form: 
+You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms semiautomatically. In the proof mode there are premisses and a goal in the following form: 
 
 $$\dfrac{\begin{matrix}
 \text{Premiss}1\\ 
