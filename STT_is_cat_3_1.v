@@ -41,6 +41,9 @@ Import ListNotations.
 Inductive Typ : Set :=
   | Arr : Typ -> Typ -> Typ.
 
+Notation "x ⇒ y" := (Arr x y) (at level 90, right associativity) :
+type_scope.
+
 Inductive Trm : Set :=
   | hyp : nat -> Trm
   | lam : Typ -> Trm -> Trm
@@ -67,9 +70,9 @@ Notation "'⊢' t '[:]' A" := (Tyty nil t A) (at level 70, no associativity) : t
 
 Definition Obj_STT := Typ.
 
-Definition Hom_STT (x y : Obj_STT) := { t : Trm | ⊢ t [:] (Arr x y)}.
+Definition Hom_STT (x y : Obj_STT) := { t : Trm | ⊢ t [:] (x ⇒ y)}.
 
-Lemma Id_STT (x : Obj_STT) : { t : Trm | ⊢ t [:] (Arr x x)}.
+Lemma Id_STT (x : Obj_STT) : { t : Trm | ⊢ t [:] (x ⇒ x)}.
 Proof.
 exists (lam x (hyp 0)).
 apply STT_lam.
