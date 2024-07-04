@@ -1,12 +1,10 @@
 import Mathlib
 
-open Set Filter
-open Topology Filter Classical Real
-open Real
+open Set Filter Topology Filter Classical Real
 
+-- A tétel azt mondja, hogy ha f és g is a végtelenben a végetlenbe tart, akkor az összegük is oda tart.
 theorem tendsto_add_at_top : forall (f g : ℝ → ℝ),
-Tendsto f atTop atTop → Tendsto g atTop atTop →
-Tendsto (λ x => f x + g x) atTop atTop := by
+Tendsto f atTop atTop → Tendsto g atTop atTop → Tendsto (λ x => f x + g x) atTop atTop := by
 
   /- by után {...} kéne, de ezt helyetesíthetjük egy "behúzással", ami ezután a proof mode-t indítja el, egyébként minden by után "{" -t kérne -/
   intros f g h1 h2
@@ -17,7 +15,7 @@ Tendsto (λ x => f x + g x) atTop atTop := by
 
   intros K
 
-  -- innen a Mathlib nem ftudja folytatni; a "matek"
+  -- innen a Mathlib nem tudja folytatni; "matek" kell hozzá: K/2-höz adnak a feltételek küszöbszámot
   have h1b := h1 (K/2)
   have h2b := h2 (K/2)
 
@@ -41,6 +39,8 @@ Tendsto (λ x => f x + g x) atTop atTop := by
   w : α                h : p w
   -----------------------------
   Exists.intro w h : Exists p
+
+  tehát a küszöbszám max i1 i2 lesz.
   -/
   use (max i1 i2)
   intros x H3
