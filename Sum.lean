@@ -1,4 +1,5 @@
 import Mathlib.Tactic.Linarith
+open Nat
 
 def sum_first_n : Nat → Nat
   | 0 => 0
@@ -6,7 +7,7 @@ def sum_first_n : Nat → Nat
 
 #eval sum_first_n 10
 
-
+-- mathlib nélkül
 theorem sum_first_n_correct : forall  n : Nat,
       2 * sum_first_n n = n*(n+1) := by
   intros n
@@ -22,6 +23,7 @@ theorem sum_first_n_correct : forall  n : Nat,
     rw[Nat.mul_comm]
     rw[<-Nat.mul_add]
 
+-- mathlibbel
 theorem sum_first_n_correct2 : forall  n : Nat,
       2 * sum_first_n n = n*(n+1) := by
       intros n
