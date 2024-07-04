@@ -11,17 +11,19 @@ Tendsto (λ x => f x + g x) atTop atTop := by
   /- by után {...} kéne, de ezt helyetesíthetjük egy "behúzással", ami ezután a proof mode-t indítja el, egyébként minden by után "{" -t kérne -/
   intros f g h1 h2
 
-  --rw?
+  --rw?     rw?, apply?, exact? taktikák keresnek a Mathlib könyvtárban
   rw [@tendsto_atTop_atTop]
+  rw [@tendsto_atTop_atTop] at h1 h2
+
   intros K
 
-  rewrite [@tendsto_atTop_atTop] at h1 h2
-
+  -- innen a Mathlib nem ftudja folytatni; a "matek"
   have h1b := h1 (K/2)
-
   have h2b := h2 (K/2)
 
-  /- Exists.elim.{u} {α : Sort u} {p : α → Prop} {b : Prop} (h₁ : ∃ x, p x) (h₂ : ∀ (a : α), p a → b) : b azaz
+  /- h1b "exists"-szel kezdődik, továbbkövetkeztetni az "esists" kikküszöbölési szabályával lehet:
+
+  Exists.elim.{u} {α : Sort u} {p : α → Prop} {b : Prop} (h₁ : ∃ x, p x) (h₂ : ∀ (a : α), p a → b) : b azaz
 
   h₁ : ∃ x, p x          h₂ : ∀ (a : α), p a → b
   ------------------------------------------------
@@ -29,11 +31,11 @@ Tendsto (λ x => f x + g x) atTop atTop := by
   -/
   apply Exists.elim h1b
   intros i1 H1
-
   apply Exists.elim h2b
   intros i2 H2
 
-  /- use = Exists.intro, ami
+  /- "exists"-tel kezdődő goal igazolásához meg kell adni egy dolgot:
+  use = Exists.intro, ami
   Exists.intro.{u} {α : Sort u} {p : α → Prop} (w : α) (h : p w) : Exists p
 
   w : α                h : p w
