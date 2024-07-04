@@ -10,8 +10,7 @@ theorem problem_mod : ∀ n : ℕ , 7^(2*n+1) + 3^(2*n+1) ≡ 0 [MOD 10] := by
   rw [Nat.pow_mul]
   norm_num
 
-  have H1 : (49^n ≡ 9^n [MOD 10]) := by
-    exact Nat.ModEq.pow n rfl
+  have H1 : (49^n ≡ 9^n [MOD 10]) := Nat.ModEq.pow n rfl
 
   have H2 : 7 * 49 ^ n + 3 * 49^n ≡ 0 [MOD 10] := by
     rw [← Nat.right_distrib]
