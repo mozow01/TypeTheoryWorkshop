@@ -36,3 +36,12 @@ theorem sum_first_n_correct2 : forall  n : Nat,
     rw [Nat.left_distrib]
     rw [a]
     linarith
+
+theorem sum_first_n_correct3 : ∀ n : Nat, 2 * sum_first_n n = n*(n+1) := by
+      intros n
+      induction n
+      case zero => -- Opcionálisan megjelölhető, hogy melyik esettel szeretnénk foglalkozni
+        rfl
+      case succ n a => -- Ha szükségünk van a feltételekre, akkor szükséges az elnevezéshez
+        rw [sum_first_n,Nat.left_distrib,a]
+        linarith
