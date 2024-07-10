@@ -26,7 +26,6 @@ This will download and install Mathlib which might take a few minutes.
 
 For the technologically inclined there is a completely [command line based method for setting up projects](https://leanprover-community.github.io/install/project.html). A summary of that follows below.
 
-
 ````my_project```` is going to be your Lean4 project (within a folder say Dokumentumok/Lean, where you are in, in Terminal or "Parancssor" for win)  
 
 ````terminal
@@ -35,13 +34,13 @@ lake +leanprover/lean4:nightly-2024-04-24 new my_project math
 
 Then ````my_project/my_project```` and ````my_project/my_project/Basic.lean```` are created, and within it, you can start programming in Lean4.  
 
-If you use VSCode, then **open** the project as a **folder** (my_project) and you have to activate the **Lean4 language extension,** then probably **restart** VSCode for a several times :D
+If you use VS Code, then **open** the project as a **folder** (my_project) and you have to activate the **Lean4 language extension,** then probably **restart** VS Code for a several times :D
 
 ## Theorem Proving in Lean4
 
 For a quick introduction see https://leanprover.github.io/theorem_proving_in_lean4/title_page.html .
 
-To check that in your Lean4 project Mathlib4 works well, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
+To check that Mathlib4 works well in your Lean4 project, we create a theorem in Basic.lean (clearly, you can create new .lean files in this folder).
 
 ````lean
 theorem flipterms : forall A B : Prop, A ∧ B → B ∧ A
@@ -52,7 +51,7 @@ the standard **surface form** is
 
 however deep in it **the meaning is:**
 
-````definition name_of_the_inhabitant : type_of_the_inhabitan_where_it_lives := the_inhabitant````
+````definition name_of_the_inhabitant : type_of_the_inhabitant_where_it_lives := the_inhabitant````
 
 Here ````the_inhabitant```` is a term or program in Lean4's native **functional** language.
 
