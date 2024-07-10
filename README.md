@@ -1,6 +1,6 @@
-# TypeTheoryWorkshop
+# Type Theory Workshop
 
-## Lean 4 & Mathlib4
+## Lean 4 & Mathlib 4
 
 Lean4: https://leanprover-community.github.io/learn.html
 
