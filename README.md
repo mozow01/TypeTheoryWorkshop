@@ -54,15 +54,15 @@ however deep in it **the meaning is:**
 
 ````definition name_of_the_inhabitant : type_of_the_inhabitan_where_it_lives := the_inhabitant````
 
-Here ````the_inhabitant```` is a term of program in Lean4's native **functional** language.
+Here ````the_inhabitant```` is a term or program in Lean4's native **functional** language.
 
-You start the so called proof mode by "by" then, you jump into an **imperative** language of tactics, that generates the proof terms in a semiautomated way. In the proof mode there are premisses and a goal in the following form: 
+You start the so called proof mode by "by", and you jump into the **imperative** language of tactics, that generates the proof terms in a semi-automated way. In the proof mode there are premisses and the goal in the following form: 
 
 $$\dfrac{\begin{matrix}
-\text{Premiss}1\\ 
-\text{Premiss}2  \\  
+\text{Premiss }1\\ 
+\text{Premiss }2  \\  
 \vdots \\
-\text{Premiss}n
+\text{Premiss }n
 \end{matrix}}{\vdash \text{Goal}}$$
 
 Here $\vdash$ is the provability or typeability sign, and it is called "turnstyle". If the theorem is in the form "forall A, if B then C", then you can put the conditions A and B into the premmisses by the tactic **"intros".** If you name the contitions then they are going to get names: "intros A B" gives names to them. 
