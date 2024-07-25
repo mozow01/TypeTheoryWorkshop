@@ -4,7 +4,6 @@ import Mathlib
 open Nat
 
 theorem log2_3_irrational : ¬ ∃ (p q : ℕ), q ≠ 0 ∧ (2 ^ p = 3 ^ q) := by
-  {
     refine Not.intro ?h
     intros H1
     apply Exists.elim H1
@@ -28,4 +27,3 @@ theorem log2_3_irrational : ¬ ∃ (p q : ℕ), q ≠ 0 ∧ (2 ^ p = 3 ^ q) := b
       exact prime_iff.mp three_prime
       exact three_div_2p
     contradiction
-  }
