@@ -129,7 +129,29 @@ Definition Compose_STT {x y z : Obj_STT} (f : Hom_STT y z) (g : Hom_STT x y) : {
 Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := ((proj1_sig f) = (proj1_sig g)).
 
 Lemma id_1_STT : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT f (Id_STT x)) f.
+Proof.
+intros.
+unfold EqMor_STT.
+unfold Compose_STT.
+simpl.
+unfold Compose_STT_term.
+unfold Id_STT.
+simpl.
+unfold Id_STT_term.
+(*Itt kell az eta és a beta szabály is és a definicionális ekvivalencia. Vagy proof irrelevancia.
 
+lam x (app (proj1_sig f) (app (lam x (hyp 0)) (hyp 0))) ≡ proj1_sig f
+
+beta: 
+
+app (lam x (hyp 0)) (hyp 0) ≡ hyp 0
+
+eta:
+
+lam x (app (proj1_sig f) hyp 0) ≡ proj1_sig f
+
+*)
+Admitted.
 
 
 Lemma EqMor_STT_ref : forall {x y} (f : Hom_STT x y), EqMor_STT f f.
