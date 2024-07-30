@@ -81,14 +81,50 @@ apply STT_lam.
 apply STT_hypO.
 Defined.
 
-Definition Compose_STT (x y z : Obj_STT) (f : Hom_STT y z) (g : Hom_STT x y) := lam x (app (proj1_sig f) (app (proj1_sig g) (hyp 0))).
-
-Definition Compose_STT_type (x y z : Obj_STT) (f : Hom_STT y z) (g : Hom_STT x y) : ⊢ (Compose_STT x y z f g) [:] (x ⇒ z).
+Lemma weakening_weak : forall Γ Δ t A,
+  Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
 Proof.
-unfold Compose_STT.
+  assert (K : forall (T : Type) (l : list T) (a : T), a :: l = [a] ++ l).
+  simpl; auto.
+  intros Γ Δ t A H.
+  induction H.
+  all: try rewrite K; try rewrite <- app_assoc; try rewrite <- K.
+  - apply STT_hypO.
+  - apply STT_hypS.
+    auto.
+  - apply STT_lam.
+    rewrite K in IHTyty.
+    rewrite <- app_assoc in IHTyty.
+    rewrite <- K in IHTyty.
+    auto.
+  - apply STT_app with (A := A).
+    all: auto.
+Defined.
+
+Definition Compose_STT_term {x y z : Obj_STT} (f : Hom_STT y z) (g : Hom_STT x y) := lam x (app (proj1_sig f) (app (proj1_sig g) (hyp 0))).
+
+Definition Compose_STT_type {x y z : Obj_STT} (f : Hom_STT y z) (g : Hom_STT x y) : ⊢ (Compose_STT_term f g) [:] (x ⇒ z).
+Proof.
+unfold Compose_STT_term.
 apply STT_lam.
+assert (Kf : ⊢ (proj1_sig f) [:] (y ⇒ z)).
+ { exact (proj2_sig f). }
+assert (Kg : ⊢ (proj1_sig g) [:] (x ⇒ y)).
+ { exact (proj2_sig g). }
+assert (Kfx : [x] ⊢ (proj1_sig f) [:] (y ⇒ z)).
+ { apply weakening_weak with (Γ := nil) (Δ := [x]) (t := proj1_sig f); auto. }
+assert (Kgx : [x] ⊢ (proj1_sig g) [:] (x ⇒ y)).
+ { apply weakening_weak with (Γ := nil) (Δ := [x]) (t := proj1_sig g); auto. }
+apply STT_app with (A:=y). auto.
+apply STT_app with (A:=x). auto.
+apply STT_hypO.
+Defined.
 
 Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := ((proj1_sig f) = (proj1_sig g)).
+
+Lemma id_1_STT : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT f (Id_STT x)) f.
+
+
 
 Lemma EqMor_STT_ref : forall {x y} (f : Hom_STT x y), EqMor_STT f f.
 Proof.
@@ -112,26 +148,6 @@ intros.
 unfold EqMor_STT.
 unfold EqMor_STT in H, H0.
 congruence.
-Defined.
-
-Lemma weakening_weak : forall Γ Δ t A,
-  Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
-Proof.
-  assert (K : forall (T : Type) (l : list T) (a : T), a :: l = [a] ++ l).
-  simpl; auto.
-  intros Γ Δ t A H.
-  induction H.
-  all: try rewrite K; try rewrite <- app_assoc; try rewrite <- K.
-  - apply STT_hypO.
-  - apply STT_hypS.
-    auto.
-  - apply STT_lam.
-    rewrite K in IHTyty.
-    rewrite <- app_assoc in IHTyty.
-    rewrite <- K in IHTyty.
-    auto.
-  - apply STT_app with (A := A).
-    all: auto.
 Defined.
 
 Fixpoint lift_aux (n : nat) (t : Trm) (k : nat) {struct t} : Trm :=
