@@ -68,17 +68,25 @@ Notation "G '⊢' t '[:]' A" := (Tyty G t A) (at level 70, no associativity) : t
 
 Notation "'⊢' t '[:]' A" := (Tyty nil t A) (at level 70, no associativity) : type_scope.
 
-
 Definition Obj_STT := Typ.
 
 Definition Hom_STT (x y : Obj_STT) := { t : Trm | ⊢ t [:] (x ⇒ y)}.
 
-Lemma Id_STT (x : Obj_STT) : { t : Trm | ⊢ t [:] (x ⇒ x)}.
+Definition Id_STT (x : Obj_STT) := (lam x (hyp 0)).
+
+Lemma Id_STT_type (x : Obj_STT) : ⊢ (Id_STT x) [:] (x ⇒ x).
 Proof.
-exists (lam x (hyp 0)).
+unfold Id_STT.
 apply STT_lam.
 apply STT_hypO.
 Defined.
+
+Definition Compose_STT (x y z : Obj_STT) (f : Hom_STT y z) (g : Hom_STT x y) := lam x (app (proj1_sig f) (app (proj1_sig g) (hyp 0))).
+
+Definition Compose_STT_type (x y z : Obj_STT) (f : Hom_STT y z) (g : Hom_STT x y) : ⊢ (Compose_STT x y z f g) [:] (x ⇒ z).
+Proof.
+unfold Compose_STT.
+apply STT_lam.
 
 Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := ((proj1_sig f) = (proj1_sig g)).
 
@@ -106,8 +114,25 @@ unfold EqMor_STT in H, H0.
 congruence.
 Defined.
 
-
-
+Lemma weakening_weak : forall Γ Δ t A,
+  Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
+Proof.
+  assert (K : forall (T : Type) (l : list T) (a : T), a :: l = [a] ++ l).
+  simpl; auto.
+  intros Γ Δ t A H.
+  induction H.
+  all: try rewrite K; try rewrite <- app_assoc; try rewrite <- K.
+  - apply STT_hypO.
+  - apply STT_hypS.
+    auto.
+  - apply STT_lam.
+    rewrite K in IHTyty.
+    rewrite <- app_assoc in IHTyty.
+    rewrite <- K in IHTyty.
+    auto.
+  - apply STT_app with (A := A).
+    all: auto.
+Defined.
 
 Fixpoint lift_aux (n : nat) (t : Trm) (k : nat) {struct t} : Trm :=
    match t with
@@ -134,38 +159,17 @@ Defined.
 Lemma lifthypS (n : nat) (i : nat) : lift (hyp i) n = hyp (i + n).
 Proof.
 induction i.
-compute. auto.
+compute; auto.
 unfold lift.
-simpl. auto.
+simpl; auto.
 Defined.
-
 
 Lemma liftlam_aux (n : nat) (k : nat) (A : Typ) (M : Trm) : lift_aux n (lam A M) k = lam A (lift_aux n M (S k)).
 Proof.
 simpl; auto.
 Defined.
 
-Lemma weakening_weak : forall Γ Δ t A,
-  Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
-Proof.
-  assert (K : forall (T : Type) (l : list T) (a : T), a :: l = [a] ++ l).
-  simpl; auto.
-  intros Γ Δ t A H.
-  induction H.
-  all: try rewrite K; try rewrite <- app_assoc; try rewrite <- K.
-  - apply STT_hypO.
-  - apply STT_hypS.
-    auto.
-  - apply STT_lam.
-    rewrite K in IHTyty.
-    rewrite <- app_assoc in IHTyty.
-    rewrite <- K in IHTyty.
-    auto.
-  - apply STT_app with (A := A).
-    all: auto.
-Qed.
-Lemma Compose_STT (x y z : Obj_STT) : (Hom_STT y z) -> (Hom_STT x y) -> (Hom_STT x z).
-Proof.
+
 
 
 
