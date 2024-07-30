@@ -81,6 +81,8 @@ apply STT_lam.
 apply STT_hypO.
 Defined.
 
+Definition Id_STT (x : Obj_STT) := sig (Id_STT_term x) (Id_STT_type x).
+
 Lemma weakening_weak : forall Γ Δ t A,
   Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
 Proof.
