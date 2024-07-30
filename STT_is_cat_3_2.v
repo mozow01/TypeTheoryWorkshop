@@ -81,7 +81,8 @@ apply STT_lam.
 apply STT_hypO.
 Defined.
 
-Definition Id_STT (x : Obj_STT) := sig (Id_STT_term x) (Id_STT_type x).
+Definition Id_STT (x : Typ) : {t : Trm | ⊢ t [:] (x ⇒ x)} :=
+  exist (fun t => ⊢ t [:] (x ⇒ x)) (Id_STT_term x) (Id_STT_type x).
 
 Lemma weakening_weak : forall Γ Δ t A,
   Γ ⊢ t [:] A -> (Γ ++ Δ) ⊢ t [:] A.
@@ -121,6 +122,9 @@ apply STT_app with (A:=y). auto.
 apply STT_app with (A:=x). auto.
 apply STT_hypO.
 Defined.
+
+Definition Compose_STT {x y z : Obj_STT} (f : Hom_STT y z) (g : Hom_STT x y) : {t : Trm | ⊢ t [:] (x ⇒ z)} :=
+  exist (fun t => ⊢ t [:] (x ⇒ z)) (Compose_STT_term f g) (Compose_STT_type f g).
 
 Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := ((proj1_sig f) = (proj1_sig g)).
 
