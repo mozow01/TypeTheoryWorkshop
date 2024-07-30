@@ -193,23 +193,6 @@ apply E_Trans with (t:= lam x
 all: auto.
 Defined.
 
-
-(*Itt kell az eta és a beta szabály is és a definicionális ekvivalencia. Vagy proof irrelevancia.
-
-lam x (app (proj1_sig f) (app (lam x (hyp 0)) (hyp 0))) ≡ proj1_sig f
-
-beta: 
-
-app (lam x (hyp 0)) (hyp 0) ≡ hyp 0
-
-eta:
-
-lam x (app (proj1_sig f) hyp 0) ≡ proj1_sig f
-
-*)
-Admitted.
-
-
 Lemma EqMor_STT_ref : forall {x y} (f : Hom_STT x y), EqMor_STT f f.
 Proof.
 intros.
