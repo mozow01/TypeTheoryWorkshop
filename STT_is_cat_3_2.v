@@ -72,11 +72,11 @@ Definition Obj_STT := Typ.
 
 Definition Hom_STT (x y : Obj_STT) := { t : Trm | ⊢ t [:] (x ⇒ y)}.
 
-Definition Id_STT (x : Obj_STT) := (lam x (hyp 0)).
+Definition Id_STT_term (x : Obj_STT) := (lam x (hyp 0)).
 
-Lemma Id_STT_type (x : Obj_STT) : ⊢ (Id_STT x) [:] (x ⇒ x).
+Lemma Id_STT_type (x : Obj_STT) : ⊢ (Id_STT_term x) [:] (x ⇒ x).
 Proof.
-unfold Id_STT.
+unfold Id_STT_term.
 apply STT_lam.
 apply STT_hypO.
 Defined.
