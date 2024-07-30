@@ -126,7 +126,42 @@ Defined.
 Definition Compose_STT {x y z : Obj_STT} (f : Hom_STT y z) (g : Hom_STT x y) : {t : Trm | ⊢ t [:] (x ⇒ z)} :=
   exist (fun t => ⊢ t [:] (x ⇒ z)) (Compose_STT_term f g) (Compose_STT_type f g).
 
-Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := ((proj1_sig f) = (proj1_sig g)).
+(*weak beta és eta*)
+Inductive STT_equiv : Trm -> Trm -> Prop :=
+  | E_Refl : forall t,
+      STT_equiv t t
+  | E_Symm : forall t s,
+      STT_equiv t s ->
+      STT_equiv s t
+  | E_Trans : forall t s u,
+      STT_equiv t s ->
+      STT_equiv s u ->
+      STT_equiv t u
+  | E_app : forall p1 p2 q1 q2,
+      STT_equiv p1 p2 ->
+      STT_equiv q1 q2 ->
+      STT_equiv (app p1 q1) (app p2 q2)
+  | E_lam : forall p1 p2 A,
+      STT_equiv p1 p2 -> 
+      STT_equiv (lam A p1) (lam A p2) 
+  | E_beta : forall A,
+      STT_equiv (app (lam A (hyp 0)) (hyp 0)) (hyp 0)
+  | E_eta : forall t A,
+      STT_equiv (lam A (app t (hyp 0))) t.
+
+Notation "'⊢' t '≡' s " := (STT_equiv t s) (at level 45, left associativity).
+
+(* Setoidnak nevezünk egy típust és az elemei közötti ekvivalenciarelációt (voltaképpen typeoid) *)
+Require Import Coq.Setoids.Setoid.
+Require Import Coq.Classes.RelationClasses.
+
+Add Parametric Relation : Trm (STT_equiv)
+  reflexivity proved by (E_Refl)
+  symmetry proved by (E_Symm )
+  transitivity proved by (E_Trans)
+  as STT_equiv_rel.
+
+Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := STT_equiv (proj1_sig f) (proj1_sig g).
 
 Lemma id_1_STT : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT f (Id_STT x)) f.
 Proof.
@@ -138,6 +173,27 @@ unfold Compose_STT_term.
 unfold Id_STT.
 simpl.
 unfold Id_STT_term.
+assert (K1 : STT_equiv
+(app (proj1_sig f)
+       (app (lam x (hyp 0)) (hyp 0))) (app (proj1_sig f) (hyp 0))).
+ { apply E_app.
+   reflexivity.
+   apply E_beta. }
+assert (K2 : STT_equiv (lam x
+    (app (proj1_sig f)
+       (app (lam x (hyp 0)) (hyp 0)))) (lam x
+    (app (proj1_sig f) (hyp 0)))).
+ { apply E_lam with (A:=x).
+   apply K1. }
+assert (K3 : STT_equiv (lam x (app (proj1_sig f) (hyp 0))) (proj1_sig f)).
+ { apply E_eta. }
+apply E_Trans with (t:= lam x
+         (app (proj1_sig f)
+            (app (lam x (hyp 0)) (hyp 0)))) (s:= lam x (app (proj1_sig f) (hyp 0))) (u:= proj1_sig f).
+all: auto.
+Defined.
+
+
 (*Itt kell az eta és a beta szabály is és a definicionális ekvivalencia. Vagy proof irrelevancia.
 
 lam x (app (proj1_sig f) (app (lam x (hyp 0)) (hyp 0))) ≡ proj1_sig f
