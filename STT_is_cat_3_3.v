@@ -37,6 +37,7 @@ type_scope.
 Require Import List Arith Peano Lia.
 Import ListNotations.
 
+(* STT *)
 
 Inductive Typ : Set :=
   | Top : Typ
@@ -67,6 +68,36 @@ Inductive Tyty : Cntxt -> Trm -> Typ -> Prop :=
 Notation "G '⊢' t '[:]' A" := (Tyty G t A) (at level 70, no associativity) : type_scope.
 
 Notation "'⊢' t '[:]' A" := (Tyty nil t A) (at level 70, no associativity) : type_scope.
+
+(*
+Lemma problem_1 : forall A B C : Prop, (A -> B) -> (B -> C) -> (A -> C).
+Proof.
+Check (q (p x)).
+intros A B C p q x.
+apply q.
+apply p.
+apply x.
+Show Proof.
+Qed.
+*)
+
+Lemma problem_2 : forall A B C : Typ, exists (t : Trm), [ Arr A B; Arr B C ] ⊢ t [:] (Arr A C).
+Proof.
+intros.
+(* [ A; Arr A B; Arr B C ] *)
+exists (lam A (app (hyp 2) (app (hyp 1) (hyp 0)))).
+apply STT_lam.
+apply STT_app with (A:=B).
+apply STT_hypS.
+apply STT_hypS.
+apply STT_hypO.
+apply STT_app with (A:=A).
+apply STT_hypS.
+apply STT_hypO.
+apply STT_hypO.
+Qed.
+
+
 
 Definition Obj_STT := Typ.
 
@@ -155,10 +186,17 @@ Notation "Γ '⊢' t '≡' s '[:]' A" := (STT_equiv Γ A t s) (at level 45, left
 Require Import Coq.Setoids.Setoid.
 Require Import Coq.Classes.RelationClasses.
 
-Add Parametric Relation (Γ : Cntxt) (A : Typ) (h : Prop) : Trm (STT_equiv Γ A)
+Lemma STT_equiv_Transitive : forall Γ A t s u,
+  STT_equiv Γ A t s -> STT_equiv Γ A s u -> STT_equiv Γ A t u.
+Proof.
+  intros Γ A t s u H1 H2.
+  apply E_Trans with (s := s); assumption.
+Qed.
+
+Add Parametric Relation (Γ : Cntxt) (A : Typ) : Trm (STT_equiv Γ A)
   reflexivity proved by (E_Refl Γ A)
   symmetry proved by (E_Symm Γ A)
-  transitivity proved by (E_Trans Γ A)
+  transitivity proved by (STT_equiv_Transitive Γ A)
   as STT_equiv_rel.
 
 Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := STT_equiv nil x (proj1_sig f) (proj1_sig g).
@@ -173,11 +211,24 @@ unfold Compose_STT_term.
 unfold Id_STT.
 simpl.
 unfold Id_STT_term.
+(* itt rewrite sajnos nem működik, ezért kézzel kell az egyenlőséget igazolni, de a setoid reláció hozzáadása miatt működik a 
+
+reflexivity, 
+
+symmetry, 
+
+transitivity, 
+
+és 
+
+ha már vannak egyenlőségek a feltételek között, akkor adott H egyenlőségfeltétel estén a rewrite H
+
+*)
 assert (K1 : STT_equiv nil x
 (app (proj1_sig f)
        (app (lam x (hyp 0)) (hyp 0))) (app (proj1_sig f) (hyp 0))).
  { apply E_app.
-   apply E_Refl.
+   reflexivity.
    apply E_beta. }
 assert (K2 : STT_equiv nil x (lam x
     (app (proj1_sig f)
@@ -185,45 +236,32 @@ assert (K2 : STT_equiv nil x (lam x
     (app (proj1_sig f) (hyp 0)))).
  { apply E_lam with (A:=x).
    apply K1. }
-assert (K3 : STT_equiv nil x (lam x (app (proj1_sig f) (hyp 0))) (proj1_sig f)).
- { apply E_eta. }
-apply E_Trans with (Γ:=nil) (A:=x) (t:= lam x
-         (app (proj1_sig f)
-            (app (lam x (hyp 0)) (hyp 0)))) (s:= lam x (app (proj1_sig f) (hyp 0))) (u:= proj1_sig f).
-all: auto.
+rewrite K2.
+apply E_eta.
 Defined.
 
 
-(*Itt kell az eta és a beta szabály is és a definicionális ekvivalencia. Vagy proof irrelevancia.
-
-lam x (app (proj1_sig f) (app (lam x (hyp 0)) (hyp 0))) ≡ proj1_sig f
-
-beta: 
-
-app (lam x (hyp 0)) (hyp 0) ≡ hyp 0
-
-eta:
-
-lam x (app (proj1_sig f) hyp 0) ≡ proj1_sig f
+(* 
+emlékeztető:
+Definition EqMor_STT {x y : Obj_STT} (f g : Hom_STT x y) := STT_equiv nil x (proj1_sig f) (proj1_sig g).
 
 *)
-Admitted.
 
 
 Lemma EqMor_STT_ref : forall {x y} (f : Hom_STT x y), EqMor_STT f f.
 Proof.
 intros.
 unfold EqMor_STT.
-reflexivity.
-Defined.
+
+Admitted.
 
 Lemma EqMor_STT_sim : forall {x y} (f g : Hom_STT x y), EqMor_STT f g -> EqMor_STT g f.
 Proof.
 intros.
 unfold EqMor_STT.
 unfold EqMor_STT in H.
-congruence.
-Defined.
+
+Admitted.
 
 Lemma EqMor_STT_trans : forall {x y} (f g h : Hom_STT x y), EqMor_STT f g -> EqMor_STT g h 
          -> EqMor_STT f h.
@@ -231,45 +269,7 @@ Proof.
 intros.
 unfold EqMor_STT.
 unfold EqMor_STT in H, H0.
-congruence.
-Defined.
 
-Fixpoint lift_aux (n : nat) (t : Trm) (k : nat) {struct t} : Trm :=
-   match t with
-     | hyp i => match (le_gt_dec k i) with
-                  | left _ => (* k <= i *) hyp (i + n)
-                  | right _ => (* k > i *) hyp i
-                end
-     | app M N => app (lift_aux n M k) (lift_aux n N k)
-     | lam A M => lam A (lift_aux n M (S k))
-   end.
-
-Definition lift t n := lift_aux n t 0.
-
-Lemma liftappaux (n : nat) (M N : Trm) (k : nat) : lift_aux n (app M N) k = app (lift_aux n M k) (lift_aux n N k).
-Proof.
-simpl; auto.
-Defined.
-
-Lemma liftapp (n : nat) (M N : Trm) : lift (app M N) n  = app (lift M n) (lift N n).
-Proof.
-simpl; auto.
-Defined.
-
-Lemma lifthypS (n : nat) (i : nat) : lift (hyp i) n = hyp (i + n).
-Proof.
-induction i.
-compute; auto.
-unfold lift.
-simpl; auto.
-Defined.
-
-Lemma liftlam_aux (n : nat) (k : nat) (A : Typ) (M : Trm) : lift_aux n (lam A M) k = lam A (lift_aux n M (S k)).
-Proof.
-simpl; auto.
-Defined.
-
-
-
-
-
+(* apply E_Trans. rewrite .. ???*)
+ 
+Admitted.
