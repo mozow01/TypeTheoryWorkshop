@@ -162,27 +162,54 @@ Class CartClosedCat (C : Category) := CartClosedCat_mk {
     Lam (Exp_app ∘ (Prod_mor (Compose h First) (Compose (Id y) Second))) = h
 }.
 
-Lemma pr_1 : forall A, A -> True.
-Proof.
-firstorder.
-Show Proof.
-Qed.
+(*
+Lemma pr_1 (x y z : Typ) (t s) : (⊢ t [:] (Imp x y)) -> (⊢ s [:] ( Imp x z)) -> (⊢ lam x (cnj (app (hyp 0)) (app (hyp 0) )[:] (Imp x (Cnj y z)). 
+*)
 
-Lemma top_1 : forall A : Typ,  ⊢ (lam A top) [:] (Imp A Top).
+
+Definition Prodmor_STT_term (x y z : Obj_STT) (f : {t : Trm | ⊢ t [:] (Imp x y)} ) (g : {t : Trm | ⊢ t [:] ( Imp x z)} ) := lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g)(hyp 0) )).
+
+Lemma Prodmor_STT_type (x y z : Obj_STT) (f : {t : Trm | ⊢ t [:] (Imp x y)} ) (g : {t : Trm | ⊢ t [:] ( Imp x z)} ) : ⊢ lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g)(hyp 0) )) [:] (Imp x (Cnj y z)).
+Proof.
+apply STT_lam.
+apply STT_cnj.
+apply STT_app with (A:=x).
+apply weakening_weak with (Γ := nil) (Δ := [x]) (t := proj1_sig f).
+exact (proj2_sig f).
+apply STT_hypO.
+apply STT_app with (A:=x).
+apply weakening_weak with (Γ := nil) (Δ := [x]) (t := proj1_sig g).
+exact (proj2_sig g).
+apply STT_hypO.
+Defined.
+
+Definition Prodmor_STT (x y z : Obj_STT) (f : {t : Trm | ⊢ t [:] (Imp x y)} ) (g : {t : Trm | ⊢ t [:] ( Imp x z)} ) : {t : Trm | ⊢ t [:]  (Imp x (Cnj y z))} :=
+  exist (fun t => ⊢ t [:] (Imp x (Cnj y z))) (Prodmor_STT_term x y z f g) (Prodmor_STT_type x y z f g).
+
+
+
+Definition Topmor_STT_term (A : Obj_STT) := (lam A top).
+
+Lemma Topmor_STT_type (A : Obj_STT) : ⊢ (lam A top) [:] (Imp A Top).
 Proof.
 intros.
 apply STT_lam.
 apply STT_top.
 Defined.
 
+Definition Topmor_STT (x : Typ) : {t : Trm | ⊢ t [:] (Imp x Top)} :=
+  exist (fun t => ⊢ t [:] ((Imp x Top))) (Topmor_STT_term x) (Topmor_STT_type x).
+
+
+(*
 Lemma prod_3 : forall {A B C} t s, (⊢ t [:] (Imp A B)) -> (⊢ s [:] (Imp A C)) -> (⊢ t [:] (Imp A (Cnj B C))).
 Proof.
 intros.
-
-Defined.
+Abort.
+*)
 
 Instance STT_as_a_CCC : CartClosedCat STT_as_a_Cat. 
 Proof.
-apply CartClosedCat_mk with (Top_obj := Top) (Prod_obj := Cnj) (Exp_obj := (fun A B => Imp B A)).
+apply CartClosedCat_mk with (Top_obj := Top) (Top_mor := Topmor_STT) (Prod_obj := Cnj) (Prod_mor := Prodmor_STT) (Exp_obj := (fun A B => Imp B A)) (First := First_STT) (Second := Second_STT) (Exp_app := Expapp_STT) (Lam := Lam_STT).
 
 Defined.
