@@ -200,16 +200,230 @@ Defined.
 Definition Topmor_STT (x : Typ) : {t : Trm | ⊢ t [:] (Imp x Top)} :=
   exist (fun t => ⊢ t [:] ((Imp x Top))) (Topmor_STT_term x) (Topmor_STT_type x).
 
-
-(*
-Lemma prod_3 : forall {A B C} t s, (⊢ t [:] (Imp A B)) -> (⊢ s [:] (Imp A C)) -> (⊢ t [:] (Imp A (Cnj B C))).
+Lemma First_STT_type (x y : Obj_STT) : ⊢ (lam (Cnj x y) (proj_1 (hyp 0))) [:] (Imp (Cnj x y) x).
 Proof.
-intros.
-Abort.
-*)
+apply STT_lam.
+apply STT_proj1 with (A:=x) (B:=y).
+apply STT_hypO.
+Defined.
+
+Definition First_STT_term (x y : Obj_STT) := (lam (Cnj x y) (proj_1 (hyp 0))). 
+
+Definition First_STT (x y : Typ) : {t : Trm | ⊢ t [:] (Imp (Cnj x y) x)} :=
+  exist (fun t => ⊢ t [:] (Imp (Cnj x y) x)) (First_STT_term x y) (First_STT_type x y).
+
+Lemma Second_STT_type (x y : Obj_STT) : ⊢ (lam (Cnj x y) (proj_2 (hyp 0))) [:] (Imp (Cnj x y) y).
+Proof.
+apply STT_lam.
+apply STT_proj2 with (A:=x) (B:=y).
+apply STT_hypO.
+Defined.
+
+Definition Second_STT_term (x y : Obj_STT) := (lam (Cnj x y) (proj_2 (hyp 0))). 
+
+Definition Second_STT (x y : Typ) : {t : Trm | ⊢ t [:] (Imp (Cnj x y) y)} :=
+  exist (fun t => ⊢ t [:] (Imp (Cnj x y) y)) (Second_STT_term x y) (Second_STT_type x y).
+
+Lemma Expapp_STT_type (y z : Typ) : ⊢ lam (Cnj (Imp y z) y) (app (proj_1 (hyp 0)) (proj_2 (hyp 0)) ) [:] (Imp (Cnj (Imp y z) y) z).
+Proof.
+apply STT_lam.
+assert (K0 : [Cnj (y ⊃ z) y] ⊢ (hyp 0) [:] (Cnj (y ⊃ z) y)).
+apply STT_hypO.
+assert (K1 : [Cnj (y ⊃ z) y] ⊢ (proj_1 (hyp 0)) [:] (y ⊃ z)).
+apply STT_proj1 in K0.
+auto.
+assert (K2 : [Cnj (y ⊃ z) y] ⊢ (proj_2 (hyp 0)) [:] y).
+apply STT_proj2 in K0.
+auto.
+apply STT_app with (A:=y) (B:=z).
+all: auto.
+Defined.
+
+Definition Expapp_STT_term (y z : Obj_STT) := lam (Cnj (Imp y z) y) (app (proj_1 (hyp 0)) (proj_2 (hyp 0)) ). 
+
+Definition Expapp_STT (y z : Typ) : {t : Trm | ⊢ t [:] (Imp (Cnj (Imp y z) y) z)} :=
+  exist (fun t => ⊢ t [:] (Imp (Cnj (Imp y z) y) z)) (Expapp_STT_term y z) (Expapp_STT_type y z).
+
+Lemma Lam_STT_type (x y z : Obj_STT) (g : {t : Trm | ⊢ t [:] (Imp (Cnj x y) z)}) : ⊢ (lam x (lam y (app (proj1_sig g) (cnj (hyp 1) (hyp 0))))) [:] Imp x (Imp y z).
+Proof.
+apply STT_lam.
+apply STT_lam.
+assert (K1 : ⊢ (proj1_sig g) [:] (Cnj x y ⊃ z)).
+exact (proj2_sig g).
+assert (K2 : [y; x] ⊢ (cnj (hyp 1) (hyp 0)) [:] (Cnj x y)).
+apply STT_cnj.
+apply STT_hypS.
+apply STT_hypO.
+apply STT_hypO.
+apply STT_app with (A:=(Cnj x y)) (B:=z).
+all: auto.
+apply weakening_weak with (Γ:=nil) (Δ:=[y; x]).
+auto.
+Defined.
+
+Definition Lam_STT_term (x y z : Obj_STT) (g : {t : Trm | ⊢ t [:] (Imp (Cnj x y) z)}) := (lam x (lam y (app (proj1_sig g) (cnj (hyp 1) (hyp 0))))). 
+
+Definition Lam_STT (x y z : Typ) (g : {t : Trm | ⊢ t [:] (Imp (Cnj x y) z)}) : {t : Trm | ⊢ t [:] (Imp x (Imp y z))} :=
+  exist (fun t => ⊢ t [:] (Imp x (Imp y z))) (Lam_STT_term x y z g) (Lam_STT_type x y z g).
 
 Instance STT_as_a_CCC : CartClosedCat STT_as_a_Cat. 
 Proof.
 apply CartClosedCat_mk with (Top_obj := Top) (Top_mor := Topmor_STT) (Prod_obj := Cnj) (Prod_mor := Prodmor_STT) (Exp_obj := (fun A B => Imp B A)) (First := First_STT) (Second := Second_STT) (Exp_app := Expapp_STT) (Lam := Lam_STT).
-
+all: intros; simpl Obj in *; simpl Hom in *;
+simpl Compose in *; apply ProofIrrelevance.
 Defined.
+
+Structure VAL (C : Category) (CC : CartClosedCat C) : Type := makeVAL 
+  { V :> Typ -> Obj;
+    VAL_top : V Top = Top_obj;
+    VAL_imp : forall {A B}, V (Imp A B) = Exp_obj (V B) (V A);
+    VAL_cnj : forall {A B}, V (Cnj A B) = Prod_obj (V A) (V B);
+  }.
+
+Fixpoint VAL_Cntxt (C : Category) (CC : CartClosedCat C) (v : VAL C CC) (Γ : list Typ) := 
+  match Γ with 
+    | nil => Top_obj
+    | A :: Γ' => Prod_obj (VAL_Cntxt C CC v Γ') (v A) 
+  end.
+
+Notation "[[ Γ ]]_ C CC v" := (VAL_Cntxt C CC v Γ) (at level 200, no associativity) :
+type_scope.
+
+Lemma Soundness_ver (C : Category) (CC : CartClosedCat C) : 
+forall v Γ A, (exists t, (Γ ⊢ t [:] A)) -> inhabited (Hom (VAL_Cntxt C CC v Γ) (v A)).
+Proof.
+  intros v Γ A H.
+  elim H.
+  intros. 
+  induction H0.
+  - apply inhabits.
+  rewrite VAL_top.
+  exact (Top_mor).
+  - apply inhabits; simpl.
+  exact (@Second C CC (VAL_Cntxt C CC v Γ) (v A) ).
+  - assert (H1 : (exists t : Trm, Γ ⊢ t [:] A)). 
+    { exists (hyp i). exact H0. } 
+  apply IHTyty in H1.
+  induction H1; apply inhabits.
+  exact (Compose X (@First C CC (VAL_Cntxt C CC v Γ) (v B))).
+  - assert (Inh : inhabited ((VAL_Cntxt C CC v (A :: Γ)) → v B)). 
+    { apply IHTyty; exists t; exact H0. } clear IHTyty H0 H t. 
+  rewrite VAL_imp; simpl in Inh. 
+  induction Inh; apply inhabits. 
+  exact (@Lam C CC (VAL_Cntxt C CC v Γ) (v A) (v B) X). 
+  - assert (Inh1 : inhabited ((VAL_Cntxt C CC v Γ) → v (Imp A B))).
+    { apply IHTyty1; exists t; exact H0_. } clear IHTyty1 H0_.
+  assert (Inh2 : inhabited ((VAL_Cntxt C CC v Γ) → v A)).
+  { apply IHTyty2; exists s; exact H0_0. } clear IHTyty2 H0_0 H t s.
+  rewrite VAL_imp in Inh1.
+  induction Inh1, Inh2; apply inhabits.
+  assert (Y : ((VAL_Cntxt C CC v Γ) → (Prod_obj (Exp_obj (v B) (v A))) (v A ))).
+  { exact (@Prod_mor C CC ((VAL_Cntxt C CC v Γ)) (Exp_obj (v B) (v A)) (v A) X X0 ). }
+  assert (Z : (Prod_obj (Exp_obj (v B) (v A)) (v A)) → v B ).
+  { exact (@Exp_app C CC (v A) (v B)). }
+  exact (Compose Z Y).
+  - assert (Inh1 : inhabited ((VAL_Cntxt C CC v Γ) → v A)).
+    { apply IHTyty1; exists t; exact H0_. } clear IHTyty1 H0_.
+  assert (Inh2 : inhabited ((VAL_Cntxt C CC v Γ) → v B)).
+  { apply IHTyty2; exists s; exact H0_0. } clear IHTyty2 H0_0 H t s.
+  induction Inh1, Inh2; apply inhabits.
+  rewrite VAL_cnj.
+  exact (@Prod_mor C CC (VAL_Cntxt C CC v Γ) (v A) (v B) X X0).
+  - assert (Inh : inhabited ((VAL_Cntxt C CC v Γ) → v (Cnj A B))).
+    { apply IHTyty; exists t; exact H0. } clear IHTyty H0 H t.
+  induction Inh; apply inhabits.
+  rewrite VAL_cnj in X.
+  assert (Y : (Prod_obj (v A) (v B) ) → v A).
+  { exact (@First C CC (v A) (v B)). }
+  exact (Compose Y X).
+  - assert (Inh : inhabited ((VAL_Cntxt C CC v Γ) → v (Cnj A B))).
+    { apply IHTyty; exists t; exact H0. } clear IHTyty H0 H t.
+  induction Inh; apply inhabits.
+  rewrite VAL_cnj in X.
+  assert (Y : (Prod_obj (v A) (v B) ) → v B).
+  { exact (@Second C CC (v A) (v B)). }
+  exact (Compose Y X).
+Defined.
+
+Theorem Soundness : (forall A Γ, (exists t, (Γ ⊢ t [:] A)) -> (forall (C : Category) (CC : CartClosedCat C) v, inhabited (Hom (VAL_Cntxt C CC v Γ) (v A)))).
+Proof. 
+assert (S : (forall (C : Category) (CC : CartClosedCat C) v Γ A, (exists t, (Γ ⊢ t [:] A)) -> inhabited (Hom (VAL_Cntxt C CC v Γ) (v A))) -> (forall A Γ, (exists t, (Γ ⊢ t [:] A)) -> (forall (C : Category) (CC : CartClosedCat C) v, inhabited (Hom (VAL_Cntxt C CC v Γ) (v A))))).
+auto.
+apply S.
+apply Soundness_ver.
+Defined. 
+
+Fixpoint Cnj_Cntxt (Γ : list Typ) := 
+  match Γ with 
+    | nil => Top
+    | A :: Γ' => Cnj (Cnj_Cntxt Γ') A 
+  end.
+
+Definition V_STT : VAL STT_as_a_Cat STT_as_a_CCC.
+Proof.
+apply (makeVAL STT_as_a_Cat STT_as_a_CCC) with (V := (fun A : Typ => A)).
+all: simpl; auto.
+Defined.
+
+Lemma cntx_1 : forall Γ, VAL_Cntxt STT_as_a_Cat STT_as_a_CCC V_STT Γ = Cnj_Cntxt Γ.
+Proof.
+intros.
+induction Γ.
+simpl; auto.
+simpl.
+rewrite IHΓ.
+auto.
+Defined.
+
+Lemma imp_cntx_1 : forall A B t, (⊢ t
+     [:] (B ⊃ A)) -> [ B ] ⊢ (app t (hyp 0)) [:] A.
+Proof. 
+  intros A B t H.
+  assert (K : [B] ⊢ t [:] (B ⊃ A)).
+  apply weakening_weak with (Γ := nil) (Δ := [B]) (t := t).
+  auto.
+  assert (L : [B] ⊢ (hyp 0) [:] B).
+  apply STT_hypO.
+  apply STT_app with (A:=B) (B:=A).
+  all: auto.
+Defined.
+
+Lemma val_1 : forall A, V_STT A = A.
+Proof.
+intros.
+compute.
+auto.
+Defined.
+
+Theorem Completeness : 
+forall A Γ, (forall (C : Category) (CC : CartClosedCat C) v, inhabited (Hom (VAL_Cntxt C CC v Γ) (v A))) -> (exists t, ( [ Cnj_Cntxt Γ ] ⊢ t [:] A)).
+Proof.
+intros.
+assert (K : inhabited (Hom (VAL_Cntxt STT_as_a_Cat STT_as_a_CCC V_STT Γ) (V_STT A))).
+apply H.
+elim K.
+intros L.
+simpl Obj in *; simpl Hom in *.
+rewrite cntx_1 with (Γ := Γ) in L.
+assert (L1 : ⊢ proj1_sig L
+  [:] ((Cnj_Cntxt Γ) ⊃ V_STT A)).
+exact (proj2_sig L).
+assert (L2 : [ Cnj_Cntxt Γ ] ⊢ (app (proj1_sig L) (hyp 0))
+     [:] (V_STT A)).
+apply imp_cntx_1 with ( B := Cnj_Cntxt Γ) (A := V_STT A).
+auto.
+rewrite val_1 in L2. 
+exists (app (proj1_sig L) (hyp 0)).
+auto.
+Defined.
+
+Lemma HF : forall Γ A, (exists t, ( [ Cnj_Cntxt Γ ] ⊢ t [:] A)) -> (exists s, ( Γ ⊢ s [:] A)).
+Proof.
+Abort.
+
+
+
+
+
+
+
