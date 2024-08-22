@@ -40,6 +40,7 @@ Import ListNotations.
 (* STT *)
 
 Inductive Typ : Set :=
+  | At : nat -> Typ
   | Top : Typ
   | Arr : Typ -> Typ -> Typ.
 
@@ -275,9 +276,63 @@ unfold EqMor_STT.
 apply E_Trans with (s := proj1_sig g); assumption.
 Qed.
 
+Lemma EqMor_STT_eq: forall {x y z} (f g: Hom_STT y z) (h i : Hom_STT x y), EqMor_STT f g /\ EqMor_STT h i ->
+        EqMor_STT (Compose_STT f h) (Compose_STT g i).
+Proof.
+intros.
+unfold EqMor_STT in *.
+unfold Compose_STT in *.
+unfold Compose_STT_term in *.
+unfold Compose_STT_type in *.
+unfold Hom_STT in *.
+simpl in *.
+destruct H.
+
+
+
+ 
+Abort.
+
 Lemma EqMor_STT_assoc : forall x y z w (f : (Hom_STT z w)) (g:(Hom_STT y z)) (h:(Hom_STT x y)),
         EqMor_STT (Compose_STT f (Compose_STT g h) ) (Compose_STT (Compose_STT f g) h).
 Proof.
+intros.
+unfold EqMor_STT.
+unfold Compose_STT.
+unfold Compose_STT_term.
+unfold Hom_STT in f.
+simpl. 
+(*
+lam x
+    (app (proj1_sig f)
+       (app
+          (lam x
+             (app (proj1_sig g)
+                (app (proj1_sig h) (hyp 0))))
+          (hyp 0)))
+≡ 
+    (app
+       (lam y
+          (app (proj1_sig f)
+             (app (proj1_sig g) (hyp 0))))
+       (app (proj1_sig h) (hyp 0)))
+
+
+
+          
+             lam x
+    (app (proj1_sig f) (app (proj1_sig g)
+                (app (proj1_sig h) (hyp 0)))
+
+
+lam x
+          (app (proj1_sig f)
+             (app (proj1_sig g) (app (proj1_sig h) (hyp 0)))
+       
+
+
+
+*)
 Abort.
 
 Lemma EqMor_STT_id_2 : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT (Id_STT y) f) f.
@@ -285,7 +340,4 @@ Proof.
 Abort.
   
 
-Lemma EqMor_STT_eq: forall {x y z} (f g: Hom_STT y z) (h i : Hom_STT x y), EqMor_STT f g /\ EqMor_STT h i ->
-        EqMor_STT (Compose_STT f h) (Compose_STT g i).
-Proof.
-Abort.
+
