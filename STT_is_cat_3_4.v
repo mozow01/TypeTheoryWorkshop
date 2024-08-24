@@ -175,9 +175,24 @@ Inductive STT_equiv : Cntxt -> Typ -> Trm -> Trm -> Prop :=
       STT_equiv Γ A (app p1 q1) (app p2 q2)
   | E_lam : forall Γ p1 p2 A B C,
       STT_equiv Γ A p1 p2 -> 
-      STT_equiv Γ C (lam B p1) (lam B p2) 
+      STT_equiv Γ C (lam B p1) (lam B p2)
+   (*E_comp diszkutálandó*)
+  | E_comp : forall Γ t1 t2 s1 s2 A B,
+      STT_equiv Γ B
+  (lam A (app t1 (app s1 (hyp 0))))
+  (lam A (app t2 (app s2 (hyp 0))))
+  (*E_beta következik az E_beta_1-ből*)
   | E_beta : forall Γ A B,
-      STT_equiv Γ B (app (lam A (hyp 0)) (hyp 0)) (hyp 0)
+      STT_equiv Γ B  (app (lam A (hyp 0)) (hyp 0)) (hyp 0)
+  | E_beta_1 : forall Γ A B t,
+      STT_equiv Γ B  (app (lam A (hyp 0)) t) t
+  | E_beta_2 : forall Γ A B t s,
+      STT_equiv Γ B 
+(app (lam A (app t (app s (hyp 0)))) (hyp 0)) 
+((app t (app s (hyp 0))))
+  | E_beta_3 : forall Γ A B t s r, STT_equiv Γ B 
+(app (lam A (app t (app s (hyp 0)))) (app r (hyp 0)))
+(app t (app s (app r (hyp 0))))
   | E_eta : forall Γ t A B,
       STT_equiv Γ B (lam A (app t (hyp 0))) t.
 
@@ -212,19 +227,6 @@ unfold Compose_STT_term.
 unfold Id_STT.
 simpl.
 unfold Id_STT_term.
-(* itt rewrite sajnos nem működik, ezért kézzel kell az egyenlőséget igazolni, de a setoid reláció hozzáadása miatt működik a 
-
-reflexivity, 
-
-symmetry, 
-
-transitivity, 
-
-és 
-
-ha már vannak egyenlőségek a feltételek között, akkor adott H egyenlőségfeltétel estén a rewrite H
-
-*)
 assert (K1 : STT_equiv nil x
 (app (proj1_sig f)
        (app (lam x (hyp 0)) (hyp 0))) (app (proj1_sig f) (hyp 0))).
@@ -240,6 +242,32 @@ assert (K2 : STT_equiv nil x (lam x
 rewrite K2.
 apply E_eta.
 Defined.
+
+Lemma EqMor_STT_id_2 : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT (Id_STT y) f) f.
+Proof.
+intros.
+unfold EqMor_STT.
+unfold Compose_STT.
+simpl.
+unfold Compose_STT_term.
+unfold Id_STT.
+simpl.
+unfold Id_STT_term.
+assert (K1 : STT_equiv nil x
+(app (lam y (hyp 0)) (app (proj1_sig f) (hyp 0))) (app (proj1_sig f) (hyp 0))).
+apply E_beta_1.
+assert (K2 : STT_equiv nil x
+
+(lam x (app (lam y (hyp 0)) (app (proj1_sig f) (hyp 0))))
+
+(lam x (app (proj1_sig f) (hyp 0)))
+).
+apply E_lam with (A:=x).
+apply K1.
+rewrite K2.
+apply E_eta.
+Defined.
+
 
 (* 
 emlékeztető:
@@ -276,22 +304,6 @@ unfold EqMor_STT.
 apply E_Trans with (s := proj1_sig g); assumption.
 Qed.
 
-Lemma EqMor_STT_eq: forall {x y z} (f g: Hom_STT y z) (h i : Hom_STT x y), EqMor_STT f g /\ EqMor_STT h i ->
-        EqMor_STT (Compose_STT f h) (Compose_STT g i).
-Proof.
-intros.
-unfold EqMor_STT in *.
-unfold Compose_STT in *.
-unfold Compose_STT_term in *.
-unfold Compose_STT_type in *.
-unfold Hom_STT in *.
-simpl in *.
-destruct H.
-
-
-
- 
-Abort.
 
 Lemma EqMor_STT_assoc : forall x y z w (f : (Hom_STT z w)) (g:(Hom_STT y z)) (h:(Hom_STT x y)),
         EqMor_STT (Compose_STT f (Compose_STT g h) ) (Compose_STT (Compose_STT f g) h).
@@ -302,42 +314,53 @@ unfold Compose_STT.
 unfold Compose_STT_term.
 unfold Hom_STT in f.
 simpl. 
-(*
-lam x
+assert (K1: STT_equiv nil x
+(lam x
     (app (proj1_sig f)
-       (app
-          (lam x
-             (app (proj1_sig g)
-                (app (proj1_sig h) (hyp 0))))
-          (hyp 0)))
-≡ 
-    (app
-       (lam y
-          (app (proj1_sig f)
-             (app (proj1_sig g) (hyp 0))))
-       (app (proj1_sig h) (hyp 0)))
+       (app (lam x (app (proj1_sig g) (app (proj1_sig h) (hyp 0)))) (hyp 0))))
+(lam x
+    (app (proj1_sig f)
+       (app (proj1_sig g) (app (proj1_sig h) (hyp 0)))))).
+apply E_lam with (A:=x).
+apply E_app.
+reflexivity.
+apply E_beta_2.
+assert (K2: STT_equiv nil x 
+(lam x (app (lam y (app (proj1_sig f) (app (proj1_sig g) (hyp 0)))) (app (proj1_sig h) (hyp 0))))
 
+(lam x ((app (proj1_sig f) (app (proj1_sig g) (app (proj1_sig h) (hyp 0))))))).
+apply E_lam with (A:=x).
+apply E_beta_3.
+rewrite K1.
+rewrite K2.
+reflexivity.
+Defined.
 
-
-          
-             lam x
-    (app (proj1_sig f) (app (proj1_sig g)
-                (app (proj1_sig h) (hyp 0)))
-
-
-lam x
-          (app (proj1_sig f)
-             (app (proj1_sig g) (app (proj1_sig h) (hyp 0)))
-       
-
-
-
-*)
-Abort.
-
-Lemma EqMor_STT_id_2 : forall x y (f : (Hom_STT x y)), EqMor_STT (Compose_STT (Id_STT y) f) f.
+Lemma EqMor_STT_eq: forall {x y z} (f g: Hom_STT y z) (h i : Hom_STT x y), EqMor_STT f g /\ EqMor_STT h i ->
+        EqMor_STT (Compose_STT f h) (Compose_STT g i).
 Proof.
-Abort.
-  
+intros.
+unfold EqMor_STT in *.
+unfold Compose_STT in *.
+unfold Compose_STT_term in *.
+unfold Compose_STT_type in *.
+unfold Hom_STT in *.
+simpl in *.
+elim H.
+intros H0 H1.
+apply E_comp.
+Defined.
 
+Instance STT_as_a_Cat : Category. 
+Proof. 
+apply cat_mk with (Obj := Obj_STT) (Hom := Hom_STT) (Id := Id_STT) (Compose := @Compose_STT) (EqMor := @EqMor_STT).
+{ intros. apply EqMor_STT_ref. }
+{ intros. apply EqMor_STT_trans with (g:=g). all: auto. } 
+{ intros. apply EqMor_STT_sym. all: auto. } 
+{ intros. apply EqMor_STT_assoc. }
+{ intros. apply id_1_STT. }
+{ intros. apply EqMor_STT_id_2. }
+{ intros. apply EqMor_STT_eq. auto. }
+Defined.
+  
 
