@@ -14,3 +14,5 @@ KL szerint (ismerve az árverés dinamikáját) az érvényes csapatnak volt 2 h
 
 IL szerint (ismerve az árverés dinamikáját) az érvényes csapatnak volt 1 hit-je, 1 false alarm-ja és 2 correct rejection-je. Az érvénytelen csapatnak volt 2 hit-je, 1 miss-je, és 1 correct rejection-je. Így mindkét csapat azonos eredménnyel zárt ebben az esetben is (3-3 hit + correct rejection).
 
+Összességében tehát mindkét csapat 3-at talált el és 1-et rontott.
+
