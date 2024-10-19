@@ -4,7 +4,7 @@
 
 Az érvényes csapat az 1. és 2. következtetést vitte el, az érvénytelen csapat a 3. és a 4. következtetést.
 
-A klasszikus logika (KL) alapján az 1. 2. és 3. következtetés érvényes, az utolsó, a 4. érvénytelen.
+A klasszikus logika (KL) alapján az 1., 2. és 3. következtetés érvényes, az utolsó, a 4. érvénytelen.
 
 A konstruktív/intuicionista logika (IL) alapján csak a 2. érvényes, az 1. 3. és 4. érvénytelen. 
 
