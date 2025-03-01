@@ -6,7 +6,7 @@ Class Semigroup : Type := mkSemigroup {
   assSemi : forall x y z : carrier, op (op x y) z  = op x (op y z)
 }.
 
-Instance Function_composition_semigroup (A : Type) : Semigroup.
+Instance FunspaceIsASemigroup (A : Type) : Semigroup.
 Proof.
 apply mkSemigroup with (carrier := A -> A )(op := fun f g => fun x => f (g x)).
 reflexivity.
