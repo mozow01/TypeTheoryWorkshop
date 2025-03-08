@@ -55,7 +55,7 @@ Inductive Tyty : Cntxt -> Trm -> Typ -> Prop :=
   | STT_snd : forall Γ t A B,
       Tyty Γ t (A × B) -> Tyty Γ (snd t) B
 
-  (* Injekciók *)
+  (* Inklúziók *)
   | STT_inl : forall Γ t A B,
       Tyty Γ t A -> Tyty Γ (inl t) (A × B)
   | STT_inr : forall Γ t A B,
