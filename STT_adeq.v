@@ -1,3 +1,4 @@
+(*Adequacy of STT and CCC in logical level*)
 Require Import List.
 Import ListNotations.
 
