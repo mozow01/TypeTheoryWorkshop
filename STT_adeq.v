@@ -1,4 +1,16 @@
-(*Adequacy of STT and CCC in logical level*)
+
+(* STT-CCC eqvivalence:
+Proof irrelevant case. Explicite axiom is postulated:
+
+forall (Γ : Cntxt) (A : Typ) (x y : { t : Trm | Γ ⊢ t [:] A}), x = y.
+
+
+If |- t : A -> B in STT, then there is a morphism f in CCC such that f : A -> B.
+
+If there is a morphism f in CCC such that f : A -> B, then there is a t such that |- t : A -> B in STT.
+
+
+*)
 Require Import List.
 Import ListNotations.
 
