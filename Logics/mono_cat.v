@@ -14,8 +14,8 @@ Class Category := cat_mk {
 Print unit.
 
 
-Class Mono : Type :=
-  mk_Mono {
+Class Monoid : Type :=
+  mk_Monoid {
     A : Type;
     e : A;
     op : A -> A -> A;
@@ -24,7 +24,7 @@ Class Mono : Type :=
     right_id_ax : forall x : A, op x e = x
   }.
 
-Theorem MonoCat (M : Mono) : Category.
+Theorem Mono_is_a_Cat (M : Monoid) : Category.
 Proof. 
 apply cat_mk with 
 (Obj:=unit) 
@@ -37,6 +37,26 @@ intros.
 apply right_id_ax.
 intros.
 apply left_id_ax.
+Defined.
+
+Axiom exten : forall (f g : nat -> nat), (fun n => f n) = (fun n => g n) -> f = g.  
+
+Theorem Natfun_is_a_Cat : Category.
+Proof. 
+apply cat_mk with 
+(Obj:=unit) 
+(Hom:=(fun (x : unit)(y : unit) => (nat -> nat) )) 
+(Id:=(fun (x : unit) => fun (x : nat) => x)) 
+(Compose:=(fun (x : unit) (y : unit) (z : unit) (f : nat -> nat) (g : nat -> nat) => (fun n => f (g n)))).
+intros.
+apply exten.
+reflexivity.
+intros.
+apply exten.
+reflexivity.
+intros.
+apply exten.
+reflexivity.
 Defined.
 
 
