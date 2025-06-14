@@ -301,16 +301,6 @@ Inductive STT_equiv : Trm -> Trm -> Prop :=
       let f_comp := (lam z (app (lam (Cnj x y) (proj_1 (hyp 0))) (app g_t (hyp 0)))) in
       let g_comp := (lam z (app (lam (Cnj x y) (proj_2 (hyp 0))) (app g_t (hyp 0)))) in
       STT_equiv (lam z (cnj (app f_comp (hyp 0)) (app g_comp (hyp 0)))) g_t
-(* E_exp_ax : forall {x y z : Typ} (g_t : Trm),
-      STT_equiv
-        (lam (Cnj x y) (app
-           (lam (Cnj (Imp y z) y) (app (proj_1 (hyp 0)) (proj_2 (hyp 0))))
-           (app
-              (lam (Cnj x y) (cnj
-                 (app (lam (Cnj x y) (app (lam x (lam y (app g_t (cnj (hyp 1) (hyp 0))))) (app (lam (Cnj x y) (proj_1 (hyp 0))) (hyp 0)))) (hyp 0))
-                 (app (lam (Cnj x y) (app (lam y (hyp 0)) (app (lam (Cnj x y) (proj_2 (hyp 0))) (hyp 0)))) (hyp 0))))
-              (hyp 0))))
-        g_t*)
 | E_exp_ax : forall {x y z} (g : Hom_STT (Cnj x y) z),
       STT_equiv (proj1_sig (Compose_STT (Expapp_STT y z) (Prodmor_STT (Cnj x y) (Imp y z) y (Compose_STT (Lam_STT x y z g) (First_STT x y)) (Compose_STT (Id_STT y) (Second_STT x y))))) (proj1_sig g)
   | E_unique_exp : forall {x y z} (h : Hom_STT x (Imp y z)),
@@ -556,28 +546,15 @@ Proof.
   unfold EqMor_STT, Compose_STT, Prodmor_STT, First_STT.
   simpl.
   unfold Compose_STT_term, Prodmor_STT_term, First_STT_term.
-
-  (* A cél a következő ekvivalencia igazolása:
-     STT_equiv
-       (lam x
-          (app (lam (Cnj y z) (proj_1 (hyp 0)))
-             (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
-                (hyp 0))))
-       (proj1_sig f)
-  *)
-
-  (* Először a lambda-kifejezés törzsére vonatkozó ekvivalenciát igazoljuk. *)
   assert (K_body_equiv : STT_equiv
     (app (lam (Cnj y z) (proj_1 (hyp 0)))
          (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
               (hyp 0)))
     (app (proj1_sig f) (hyp 0))).
   {
-    (* Ezt az újonnan felvett szabályunk biztosítja. *)
     apply E_prod_ax1.
   }
 
-  (* Ezt az ekvivalenciát "beemeljük" a külső lambda alá. *)
   assert (K_lam_equiv : STT_equiv
     (lam x (app (lam (Cnj y z) (proj_1 (hyp 0)))
                 (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
@@ -588,10 +565,7 @@ Proof.
     apply K_body_equiv.
   }
 
-  (* A `rewrite` után a cél `lam x (app (proj1_sig f) (hyp 0)) ≅ proj1_sig f`. *)
   rewrite K_lam_equiv.
-
-  (* Ez pedig pontosan az éta-ekvivalencia. *)
   apply E_eta.
 Defined.
 
@@ -603,27 +577,16 @@ Proof.
   simpl.
   unfold Compose_STT_term, Prodmor_STT_term, Second_STT_term.
 
-  (* A cél a következő ekvivalencia igazolása:
-     STT_equiv
-       (lam x
-          (app (lam (Cnj y z) (proj_2 (hyp 0)))
-             (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
-                (hyp 0))))
-       (proj1_sig g)
-  *)
-
-  (* Ismét a lambda-kifejezés törzsére vonatkozó ekvivalenciát igazoljuk. *)
   assert (K_body_equiv : STT_equiv
     (app (lam (Cnj y z) (proj_2 (hyp 0)))
          (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
               (hyp 0)))
     (app (proj1_sig g) (hyp 0))). 
   {
-    (* Ezt a most felvett E_prod_ax2 szabály biztosítja. *)
+   
     apply E_prod_ax2.
   }
 
-  (* Ezt az ekvivalenciát "beemeljük" a külső lambda alá. *)
   assert (K_lam_equiv : STT_equiv
     (lam x (app (lam (Cnj y z) (proj_2 (hyp 0)))
                 (app (lam x (cnj (app (proj1_sig f) (hyp 0)) (app (proj1_sig g) (hyp 0))))
@@ -634,10 +597,8 @@ Proof.
     apply K_body_equiv.
   }
 
-  (* A `rewrite` után a cél `lam x (app (proj1_sig g) (hyp 0)) ≅ proj1_sig g`. *)
   rewrite K_lam_equiv.
 
-  (* Ez ismét pontosan az éta-ekvivalencia. *)
   apply E_eta.
 Defined.
 
@@ -648,17 +609,6 @@ Proof.
   unfold EqMor_STT, Prodmor_STT, Compose_STT, First_STT, Second_STT.
   simpl.
   unfold Prodmor_STT_term, Compose_STT_term, First_STT_term, Second_STT_term.
-
-  (*
-    A cél a következő ekvivalencia:
-    (lam z (cnj
-        (app (lam z (app (lam (Cnj x y) (proj_1 (hyp 0))) (app (proj1_sig g) (hyp 0)))) (hyp 0))
-        (app (lam z (app (lam (Cnj x y) (proj_2 (hyp 0))) (app (proj1_sig g) (hyp 0)))) (hyp 0))
-    ))
-    ≡ (proj1_sig g)
-  *)
-
-  (* Ez pontosan az, amit az új E_prod_eta szabályunk kimond. *)
   apply E_prod_eta.
 Defined.
 
@@ -683,16 +633,14 @@ Lemma unique_prod_STT : forall {x y z} (f : Hom_STT x y) (g : Hom_STT x z) (h : 
 Proof.
   intros x y z f g h Hf Hg.
 
-  (* A `with` után a tranzitivitási lemma (EqMor_STT_trans)
-     belső változójának a nevét (`g`) kell használni. *)
   apply EqMor_STT_trans with
     (g := Prodmor_STT x y z (Compose_STT (First_STT y z) h) (Compose_STT (Second_STT y z) h)).
 
-  { (* 1. RÉSZ: Bizonyítjuk, hogy h ≅ Prod_mor (First ∘ h) (Second ∘ h) *)
+  { 
     apply EqMor_STT_sym.
     apply (unique_prod_eta_STT h).
   }
-  { (* 2. RÉSZ: Bizonyítjuk, hogy Prod_mor (First ∘ h) (Second ∘ h) ≅ Prod_mor f g *)
+  { 
     apply Prodmor_STT_congr.
     - exact Hf.
     - exact Hg.
@@ -722,11 +670,7 @@ Proof.
     (Prod_mor := fun x y z f g => Prodmor_STT x y z f g)
     (First := fun x y => First_STT x y)
     (Second := fun x y => Second_STT x y)
-
-    (* ITT VAN A JAVÍTÁS:
-       Expliciten megmondjuk, hogy Exp_obj z y-nak az Imp y z felel meg. *)
     (Exp_obj := fun z y => Imp y z)
-
     (Exp_app := fun y z => Expapp_STT y z)
     (Lam := fun x y z g => Lam_STT x y z g).
 
