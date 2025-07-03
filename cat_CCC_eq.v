@@ -195,8 +195,27 @@ apply mk_ContraFunctor with
   (CoF_Obj := fun (A : Type) => A -> R) 
   (CoF_Hom := fun (A B : Type) (f : A -> B) => (fun (p : B -> R) => fun x => p (f x))).
 all: intros; simpl; reflexivity.
-Defined.  
+Defined. 
 
+Require Import Coq.Logic.FunctionalExtensionality. 
+
+Instance HomFunctor (C : Category) (A : @Obj C) : ContravariantFunctor C Type_as_a_Cat.
+Proof.
+apply mk_ContraFunctor with 
+  (CoF_Obj := fun (X : Obj) => Hom X A) 
+  (CoF_Hom := fun (X Y : Obj) (f : Hom X Y) => ((fun (g : Hom Y A) => Compose g f ) : Hom Y A -> Hom X A)).
+- intros.
+  extensionality g.
+  rewrite id_1.
+  simpl. reflexivity.
+- intros.
+  simpl.
+  extensionality g0.
+  apply assoc.
+Defined.
+
+(* Itt kapcsolhatjuk ki *)
+Reset FunctionalExtensionality.
 
 Definition Isomophism {C : Category} {A B : Obj} (f : Hom A B) := (exists g : Hom B A, ((f ∘ g) = Id B ) /\ ((g ∘ f) = Id A )). 
 
