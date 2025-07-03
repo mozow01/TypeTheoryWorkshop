@@ -1,3 +1,5 @@
+(*Authors: László Baráth, Zoltán Molnár, 2022*)
+
 (*The definition of Category in the Setoid Hell (aka categotry with morphism equiality) *)
 
 Class Category := cat_mk {
