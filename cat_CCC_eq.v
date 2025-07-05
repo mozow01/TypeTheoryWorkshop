@@ -181,6 +181,8 @@ apply mk_cat with
 all: intros; simpl; reflexivity.
 Defined.
 
+(*Nem kell így, de lehet, viszont ha akarjuk a funktor kategóriát és a Coq natív =-t, akkor kell funex (Coq.Logic.FunctionalExtensionality) is.*)
+
 Class ContravariantFunctor (C D : Category) := mk_ContraFunctor {
   CoF_Obj : @Obj C -> @Obj D;
   CoF_Hom : forall (x y : @Obj C), @Hom C x y -> @Hom D (CoF_Obj y) (CoF_Obj x);
