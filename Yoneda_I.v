@@ -52,7 +52,7 @@ Proof.
 apply mk_ContraFunctor with 
   (CoF_Obj := fun (X : Obj) => Hom X A) 
   (CoF_Hom := fun (X Y : Obj) (f : Hom X Y) => ((fun (g : Hom Y A) => Compose g f ) : Hom Y A -> Hom X A)).
-- intros.
+- intros. 
   extensionality g.
   rewrite id_1.
   simpl. reflexivity.
@@ -143,13 +143,13 @@ apply mk_cat with (Obj:=ContravariantFunctor C D) (Hom:=fun (F G : Contravariant
   apply id_1.
 - intros F G eta.
   apply NatTrans_extensionality.
-  intro x.
+  intro x. 
   simpl.
   apply id_2.
 Defined.
  
-Polymorphic Definition Phi_Yoneda @{oc hc} 
-  {C : Category@{oc hc}}
+Definition Phi_Yoneda 
+  {C : Category}
   {F : ContravariantFunctor C Type_as_a_Cat} 
   {A : @Obj C}
   (eta : @Hom (ContraFunctorCat C Type_as_a_Cat) (HomFunctor C A) F)
@@ -159,7 +159,7 @@ Proof.
  exact ((@trans_mor C Type_as_a_Cat (HomFunctor C A) F eta) A (@Id C A)).
 Defined.
 
-Polymorphic Definition Psi_Yoneda @{oc hc} {C : Category@{oc hc}}
+Definition Psi_Yoneda {C : Category}
   {F : ContravariantFunctor C Type_as_a_Cat} {A : @Obj C}
   (x : @CoF_Obj C Type_as_a_Cat F A)
   : (@Hom (ContraFunctorCat C Type_as_a_Cat) (HomFunctor C A) F).
@@ -175,7 +175,7 @@ Proof.
   reflexivity.
 Defined.
 
-Lemma Yoneda_left_inverse {C : Category}
+Lemma Yoneda_left {C : Category}
   {F : ContravariantFunctor C Type_as_a_Cat} {A : @Obj C} :
   forall (x : @CoF_Obj C Type_as_a_Cat F A),
     Phi_Yoneda (Psi_Yoneda x) = x.
@@ -196,7 +196,7 @@ Proof.
 Defined.
  
 
-Lemma Yoneda_right_inverse @{oc hc} {C : Category@{oc hc}}
+Lemma Yoneda_right @{oc hc} {C : Category@{oc hc}}
   {F : ContravariantFunctor C Type_as_a_Cat} {A : @Obj C} :
   forall (eta : @Hom (ContraFunctorCat C Type_as_a_Cat) (HomFunctor C A) F),
     Psi_Yoneda (Phi_Yoneda eta) = eta.
@@ -234,7 +234,7 @@ Proof.
   exists (@Psi_Yoneda C F A).
   split.
   - extensionality x.
-    apply (Yoneda_left_inverse x).
+    apply (Yoneda_left x).
   - extensionality eta.
-    apply (Yoneda_right_inverse eta).
+    apply (Yoneda_right eta).
 Defined. 
