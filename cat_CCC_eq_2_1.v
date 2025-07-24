@@ -277,3 +277,18 @@ Class IsLeftAdjoint  (C D : Category) (F : CovariantFunktor D C) := mk_IsLeftAdj
     (epsilon X) ∘ (@F_Hom D C F _ _ (rightadjmor f)) = f;
   lambek_2 : forall {Y X} (h : Y → (rightadjobj X)),
     rightadjmor ((epsilon X) ∘ (@F_Hom D C F _ _ h)) = h}.
+
+
+
+Class IsRightAdjoint {C D : Category} (G : CovariantFunktor C D) := mk_IsRightAdjoint {
+  leftadjobj : @Obj D -> @Obj C;
+  unit : forall (Y : @Obj D), Y → (@F_Obj C D G (leftadjobj Y));
+  leftadjmor : forall {X : @Obj D} {Y : @Obj C} (g : X → (@F_Obj C D G Y)), (leftadjobj X) → Y;
+
+  lambek_1_dual : forall {X : @Obj D} {Y : @Obj C} (g : X → (@F_Obj C D G Y)),
+    (@F_Hom C D G _ _ (leftadjmor g)) ∘ (unit X) = g;
+  lambek_2_dual : forall {X : @Obj D} {Y : @Obj C} (f : (leftadjobj X) → Y),
+    leftadjmor ((@F_Hom C D G _ _ f) ∘ (unit X)) = f
+}.
+
+
