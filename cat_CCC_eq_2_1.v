@@ -99,6 +99,19 @@ type_scope.
 Notation "x 'e↑' y" := (Exp_obj x y) (at level 80, right associativity) :
 type_scope.
 
+Lemma prod_ax_1 {C : Category} {CC : CartClosed} : forall {x y z} (f : x → y) (g : x → z), 
+    (pr_1 ∘ (Prod_mor f g) = f).
+Proof.
+intros.
+apply prod_ax.
+Defined.
+
+Lemma prod_ax_2 {C : Category} {CC : CartClosed} : forall {x y z} (f : x → y) (g : x → z), (pr_2 ∘ (Prod_mor f g) = g).
+Proof.
+intros.
+apply prod_ax.
+Defined.
+
 Theorem unique_prod {C : Category} {CC : @CartClosed C} : forall x y z (f1 : x → y) (f2 : x → z) (g : x → Prod_obj y z),
     ((pr_1 ∘ g) = f1) /\ ((pr_2 ∘ g) = f2) ->  Prod_mor f1 f2 = g.
 Proof.
@@ -255,14 +268,29 @@ Instance ProdFunctor {C : Category} {CC : @CartClosed C} (A : @Obj C) : Covarian
 Proof.
 (*Nem biztos, de próba szerencse, ki kell találni a morfizmust!*)
 apply mk_Functor with (F_Obj := fun X => X × A) (F_Hom := fun x y f => (f ∘ pr_1) ∏ pr_2).
-Abort.
+ - intros X.
+   rewrite id_2.
+   rewrite pr_and_id.
+   reflexivity.
+ - intros X Y Z g f.
+   apply unique_prod.
+   split.
+   + rewrite assoc. rewrite prod_ax_1. rewrite <- assoc. rewrite prod_ax_1. rewrite assoc. reflexivity.
+   + rewrite assoc. rewrite prod_ax_2. rewrite prod_ax_2. reflexivity.
+Defined.
+
+(*
 
 Instance ExpFunctor {C : Category} {CC : @CartClosed C} (A : @Obj C) : CovariantFunktor C C.
 Proof.
 (*Nem biztos, de próba szerencse, ki kell találni a morfizmust!*)
 apply mk_Functor with (F_Obj := fun X => X e↑ A)
 (F_Hom := fun x y f => Lam (f ∘ Ev)).
+ 
 Abort.
+
+*)
+
 
 Class IsLeftAdjoint  (C D : Category) (F : CovariantFunktor D C) := mk_IsLeftAdjoint {
 
