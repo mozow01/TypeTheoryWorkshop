@@ -1,3 +1,4 @@
+
 Polymorphic Class Category @{o h} := mk_cat {
   Obj : Type@{o};
   Hom : Obj -> Obj -> Type@{h};
@@ -18,9 +19,7 @@ type_scope.
 Notation "f ∘ g" := (Compose f g) (at level 40, left associativity) :
 type_scope.
 
-Context {C : Category}.
-
-Class CartClosed := {
+Class CartClosed {C : Category} := {
 
 (* terminal *)
 
@@ -100,9 +99,7 @@ type_scope.
 Notation "x 'e↑' y" := (Exp_obj x y) (at level 80, right associativity) :
 type_scope.
 
-Context {CC : CartClosed}.
-
-Theorem unique_prod : forall x y z (f1 : x → y) (f2 : x → z) (g : x → Prod_obj y z),
+Theorem unique_prod {C : Category} {CC : @CartClosed C} : forall x y z (f1 : x → y) (f2 : x → z) (g : x → Prod_obj y z),
     ((pr_1 ∘ g) = f1) /\ ((pr_2 ∘ g) = f2) ->  Prod_mor f1 f2 = g.
 Proof.
 intros.
@@ -111,7 +108,7 @@ rewrite <- H1; rewrite <- H2.
 apply prod_eq.
 Defined.
 
-Theorem compos_prod : forall x y z w (f : w → y ) (g : w → z ) (h : x → w),
+Theorem compos_prod {C : Category} {CC : @CartClosed C} : forall x y z w (f : w → y ) (g : w → z ) (h : x → w),
   (f ∘ h) ∏ (g ∘ h) = ( f ∏ g ) ∘ h.
 Proof.
 intros.
@@ -136,7 +133,7 @@ Defined.
 (*in_element_wise_bijection in Type*)
 Definition in_element_wise_bijection A B := exists (f: A -> B), (forall (x y : A), f x = f y -> x = y) /\ (forall (y : B), exists x, f x = y).
 
-Theorem Currying_ver_1 : forall x y z, in_element_wise_bijection (Hom (z × x) y) (Hom z (y e↑ x)).
+Theorem Currying_ver_1 {C : Category} {CC : @CartClosed C} : forall x y z, in_element_wise_bijection (Hom (z × x) y) (Hom z (y e↑ x)).
 Proof.
 intros.
 unfold in_element_wise_bijection.
@@ -156,7 +153,7 @@ Defined.
 
 Definition in_algebraic_bijection A B := exists (f: A -> B) (g: B -> A), (forall (x : A), g (f x) = x) /\ (forall (y : B), f (g y) = y).
 
-Theorem Currying_ver_2 : forall x y z, in_algebraic_bijection (Hom (z × x) y) (Hom z (y e↑ x)).
+Theorem Currying_ver_2 {C : Category} {CC : @CartClosed C} : forall x y z, in_algebraic_bijection (Hom (z × x) y) (Hom z (y e↑ x)).
 Proof.
 (* Házi *)
 Abort.
@@ -239,7 +236,7 @@ Class CovariantFunktor (C : Category) (D : Category) := mk_Functor {
     F_Hom x z (g ∘ f) = (F_Hom y z g) ∘ (F_Hom x y f);
 }.
 
-Lemma pr_and_id : forall (A B : @Obj C), Id (A × B) = pr_1 ∏ pr_2.
+Lemma pr_and_id {C : Category} {CC : @CartClosed C} : forall (A B : @Obj C), Id (A × B) = pr_1 ∏ pr_2.
 Proof.
 intros.
 assert (H : (pr_1 ∘ (Id (A × B))) ∏ (pr_2 ∘ (Id (A × B))) = pr_1 ∏ pr_2).
@@ -254,13 +251,13 @@ reflexivity.
 Defined.
 
 
-Instance ProdFunctor (A : @Obj C) : CovariantFunktor C C.
+Instance ProdFunctor {C : Category} {CC : @CartClosed C} (A : @Obj C) : CovariantFunktor C C.
 Proof.
 (*Nem biztos, de próba szerencse, ki kell találni a morfizmust!*)
 apply mk_Functor with (F_Obj := fun X => X × A) (F_Hom := fun x y f => (f ∘ pr_1) ∏ pr_2).
 Abort.
 
-Instance ExpFunctor (A : @Obj C) : CovariantFunktor C C.
+Instance ExpFunctor {C : Category} {CC : @CartClosed C} (A : @Obj C) : CovariantFunktor C C.
 Proof.
 (*Nem biztos, de próba szerencse, ki kell találni a morfizmust!*)
 apply mk_Functor with (F_Obj := fun X => X e↑ A)
@@ -290,5 +287,7 @@ Class IsRightAdjoint {C D : Category} (G : CovariantFunktor C D) := mk_IsRightAd
   lambek_2_dual : forall {X : @Obj D} {Y : @Obj C} (f : (leftadjobj X) → Y),
     leftadjmor ((@F_Hom C D G _ _ f) ∘ (unit X)) = f
 }.
+
+
 
 
