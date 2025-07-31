@@ -190,15 +190,7 @@ Class ContravariantFunctor (C : Category) (D : Category) := mk_ContraFunctor {
   CoF_comp : forall (x y z : @Obj C) (f : @Hom C y z) (g : @Hom C x y), (@CoF_Hom x z (@Compose C _ _ _ f g)) =
     (@Compose D _ _ _ (@CoF_Hom x y g) (@CoF_Hom y z f));
 }.
-
-
-Instance PredicateFunctor (R : Type) : ContravariantFunctor Type_as_a_Cat Type_as_a_Cat.
-Proof.
-apply mk_ContraFunctor with 
-  (CoF_Obj := fun (A : Type) => A -> R) 
-  (CoF_Hom := fun (A B : Type) (f : A -> B) => (fun (p : B -> R) => fun x => p (f x))).
-all: intros; simpl; reflexivity.
-Defined. 
+ 
 
 Definition Isomorphism {C : Category} {A B : Obj} (f : Hom A B) := (exists g : Hom B A, ((f ∘ g) = Id B ) /\ ((g ∘ f) = Id A )). 
 
@@ -304,7 +296,6 @@ Class IsLeftAdjoint  (C D : Category) (F : CovariantFunktor D C) := mk_IsLeftAdj
     rightadjmor ((epsilon X) ∘ (@F_Hom D C F _ _ h)) = h}.
 
 
-
 Class IsRightAdjoint {C D : Category} (G : CovariantFunktor C D) := mk_IsRightAdjoint {
   leftadjobj : @Obj D -> @Obj C;
   unit : forall (Y : @Obj D), Y → (@F_Obj C D G (leftadjobj Y));
@@ -316,6 +307,67 @@ Class IsRightAdjoint {C D : Category} (G : CovariantFunktor C D) := mk_IsRightAd
     leftadjmor ((@F_Hom C D G _ _ f) ∘ (unit X)) = f
 }.
 
+Class Monad {C : Category} (M : CovariantFunktor C C) := mk_monad {
+  return_op : forall {A}, (A → @F_Obj C C M A);
+  join_op : forall {A}, (@F_Obj C C M (@F_Obj C C M A) → @F_Obj C C M A);
+
+  monad_law_left_unit : forall {A},
+    (@join_op A) ∘ (@F_Hom C C M _ _ (@return_op A)) = Id (@F_Obj C C M A);
+
+  monad_law_right_unit : forall {A},
+    (@join_op A) ∘ (@return_op (@F_Obj C C M A)) = Id (@F_Obj C C M A);
+
+  monad_law_assoc : forall {A},
+    (@join_op A) ∘ (@F_Hom C C M _ _ (@join_op A)) = (@join_op A) ∘ (@join_op (@F_Obj C C M A))
+}.
+
+Class Comonad {C : Category} (W : CovariantFunktor C C) := mk_comonad {
+  extract : forall {A}, (@F_Obj C C W A → A);
+  duplicate : forall {A}, (@F_Obj C C W A → @F_Obj C C W (@F_Obj C C W A));
+
+  comonad_law_left_unit : forall {A},
+    (@F_Hom C C W _ _ (@extract A)) ∘ (@duplicate A) = Id (@F_Obj C C W A);
+
+  comonad_law_right_unit : forall {A},
+    (@extract (@F_Obj C C W A)) ∘ (@duplicate A) = Id (@F_Obj C C W A);
+
+  comonad_law_assoc : forall {A},
+    (@F_Hom C C W _ _ (@duplicate A)) ∘ (@duplicate A) = (@duplicate (@F_Obj C C W A)) ∘ (@duplicate A)
+}.
 
 
+Class Monad_Bind_Style {Cat : Category} (M : CovariantFunktor Cat Cat) := mk_Monad_Bind_Style {
+  return_b : forall {A}, (A → @F_Obj Cat Cat M A);
+  bind_b : forall {A B}, (A → @F_Obj Cat Cat M B) -> (@F_Obj Cat Cat M A → @F_Obj Cat Cat M B);
+  bind_law1 : forall {A B} (f : A → @F_Obj Cat Cat M B), (bind_b f) ∘ return_b = f;
+  bind_law2 : forall {A}, bind_b (@return_b A) = Id _;
+  bind_law3 : forall {A B C} (f : A → @F_Obj Cat Cat M B) (g : B → @F_Obj Cat Cat M C),
+    (bind_b g) ∘ (bind_b f) = bind_b ( (bind_b g) ∘ f )
+}.
 
+Definition bind_from_join {Cat : Category} {M : CovariantFunktor Cat Cat} {MJ : Monad M} {A B}
+  (f : A → @F_Obj Cat Cat M B) : (@F_Obj Cat Cat M A → @F_Obj Cat Cat M B) :=
+  (@join_op Cat M MJ B) ∘ (@F_Hom Cat Cat M A (@F_Obj Cat Cat M B) f).
+
+Definition join_from_bind {Cat : Category} {M : CovariantFunktor Cat Cat}  {MB : Monad_Bind_Style M} {A}
+  : (@F_Obj Cat Cat M (@F_Obj Cat Cat M A) → @F_Obj Cat Cat M A) :=
+  @bind_b Cat M MB (@F_Obj Cat Cat M A) A (Id (@F_Obj Cat Cat M A)).
+
+
+Instance Join_Implies_Bind {Cat : Category} {M : CovariantFunktor Cat Cat} (MJ : Monad M) : Monad_Bind_Style M.
+Proof.
+Abort.
+
+Instance Bind_Implies_Join {Cat : Category} {M : CovariantFunktor Cat Cat} (MB : Monad_Bind_Style M) : Monad M.
+Proof.
+Abort.
+
+Definition ComposeFunctors {C D E : Category}
+  (F : CovariantFunktor C D) (G : CovariantFunktor D E) : CovariantFunktor C E.
+Proof.
+  apply (mk_Functor C E) with
+    (F_Obj := fun x => @F_Obj D E G (@F_Obj C D F x))
+    (F_Hom := fun x y f => @F_Hom D E G _ _ (@F_Hom C D F x y f)).
+  - intros; simpl; rewrite F_id, F_id; reflexivity.
+  - intros; simpl; rewrite F_comp, F_comp; reflexivity.
+Defined.
