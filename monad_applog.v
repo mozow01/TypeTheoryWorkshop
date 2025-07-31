@@ -99,6 +99,36 @@ apply mk_monad with (M := option) (bind := @bind_opt) (unit := @return_opt).
   - intros A B C ma f g; induction ma; compute; auto. 
 Defined. 
 
+(*Tehát az option egy jó dolog a kivételek kezelésére. De ez egy általános CS dolog, az úgy nevezett Kleisli-monád.
+
+Egy M Kleisli-monád egy Type -> Type típusú dolog, azaz típust eszik és típust ad vissza, vagyis egy polimorf típuskonstruktor, pl. 
+
+  -- option, 
+  -- list.
+
+tartozik hozzá két operáció: 
+
+  -- unti (vagy return) : A -> M A, az egységleképezés
+  -- bind, ami egy kötő leképezés
+
+és három egyenlőség, amiből az első triviális, a második az első háromszög kommutativitása, a harmadik, hogy az MA -> MC két útja kommutál. 
+
+                 unit
+              A ----> M A  bind ma unit = ma
+                \      |
+                 \     |
+                  \ f  |   bind (unit a) f = f a
+                   \   |
+                unit\  |  
+              B ----> M B
+                \      |
+                 \     |
+                  \ g  |   bind (bind ma f) g = bind ma (fun x => bind (f x) g)
+                   \   |
+                    \  |  
+              C       M C
+*)
+
 (* Adatok: neveket, életkorok. *)
 Require Import List.
 Import ListNotations.
