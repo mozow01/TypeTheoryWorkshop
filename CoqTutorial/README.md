@@ -9,6 +9,7 @@ Example problem_1 : forall A B : Prop, A /\ B -> B /\ A.
 ```
 <details>
   <summary>1. megoldás.</summary>
+  
 ```destruct``` taktikával és ```split```-tel:
   
 ```coq
