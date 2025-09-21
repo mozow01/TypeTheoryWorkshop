@@ -366,9 +366,10 @@ Qed.
 **2.5 Disztributivitás fordítva**
 ````coq
 Example practice_2_2 : forall A B C : Prop, (A -> B) /\ (A -> C) -> (A -> B /\ C).
-
+````
 <details>
 <summary>1. megoldás</summary>
+
 ````coq
 Proof.
   intros A B C H.
@@ -379,9 +380,11 @@ Proof.
   - apply H_AC. exact HA.
 Qed.
 ````
+
 </details>
 <details>
 <summary>2. megoldás (rövidítve)</summary>
+
 ````coq
 Proof.
   intros A B C [H_AB H_AC] HA.
@@ -390,15 +393,19 @@ Proof.
   - apply H_AC; assumption.
 Qed.
 ````
+  
 </details>
 
 **2.6 Modus Ponens /\ -val**
+
 ````coq
 Example practice_2_3 : forall A B : Prop, A /\ (A -> B) -> B.
 ````
+
 <details>
 <summary>1. megoldás</summary>
-````coq
+
+  ````coq
 Proof.
   intros A B H.
   destruct H as [HA H_AB].
@@ -406,6 +413,7 @@ Proof.
   exact HA.
 Qed.
 ````
+
 </details>
 <details>
 <summary>2. megoldás (rövidített intros)</summary>
@@ -414,15 +422,19 @@ Proof.
   intros A B [HA H_AB].
   apply H_AB; assumption.
 Qed.
-  ````
+````
+  
 </details>
 
 **2.7 És bevezetés**
+
 ````coq
 Example practice_2_4 : forall A B : Prop, A -> B -> A /\ B.
 ````
+
 <details>
 <summary>1. megoldás</summary>
+  
 ````coq
 Proof.
   intros A B HA HB.
@@ -431,4 +443,5 @@ Proof.
   - exact HB.
 Qed.
 ````
+  
 </details>
