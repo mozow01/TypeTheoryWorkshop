@@ -38,7 +38,7 @@ Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának ill
 
 ### Mintapéldák
 
-**1.1 Identitás (Reflexivitás)**
+**1.1 (I-kombinátor)**
 
 ````coq
 Example problem_I_comb : forall A : Prop, A -> A.
@@ -60,173 +60,156 @@ Magyarázat: Az intros A H bevezeti a Prop típusú A változót és a H : A fel
 
 <details>
 <summary>2. megoldás (assumption)</summary>
-```coq
+
+````coq
 Proof.
   intros A H.
   assumption.
 Qed.
-```
+````
   
 Magyarázat: Az assumption taktika megtalálja, hogy a cél (A) már szerepel a hipotézisek között (H : A), és befejezi a bizonyítást.
 
 </details>
 
-<details>
-<summary>3. megoldás (automatikus)</summary>
-Coq
 
-Proof.
-  auto.
-Qed.
+**1.2 Weakening (az igaz mindenből következik)**
 
-Magyarázat: Az auto taktika automatikusan megoldja az ilyen egyszerű logikai azonosságokat.
-
-</details>
-
-1.2 Gyengítés (Tetszőleges feltétel hozzáadása)
-Coq
-
+````coq
 Example problem_verum_ex : forall A B : Prop, A -> (B -> A).
-
+````
 <details>
 <summary>1. megoldás (lépésenként)</summary>
-Coq
 
+  ````coq
 Proof.
   intros A B H_A H_B.
   exact H_A.
 Qed.
+````
 
-Magyarázat: Két intros-szal bevezetjük az összes feltételt. A célunk (A) már szerepel a feltételek között (H_A), a felesleges H_B hipotézist figyelmen kívül hagyjuk.
-
-</details>
-<details>
-<summary>2. megoldás (auto)</summary>
-Coq
-
-Proof.
-  auto.
-Qed.
+Magyarázat: Két intros-szal bevezetjük az összes feltételt. A cél (A) már szerepel a feltételek között (H_A), a felesleges H_B hipotézist figyelmen kívül hagyjuk.
 
 </details>
 
-1.3 Láncszabály (Tranzitivitás)
-Coq
 
+**1.3 Láncszabály**
+
+````coq
 Example problem_chain : forall A B C : Prop, (A -> B) -> (B -> C) -> (A -> C).
+````
 
 <details>
 <summary>1. megoldás (visszafelé apply)</summary>
-Coq
 
+````coq
 Proof.
   intros A B C H_AB H_BC H_A.
   apply H_BC.
   apply H_AB.
   exact H_A.
 Qed.
+````
 
 Magyarázat: A Coq visszafelé építi fel a láncot: az apply H_BC a C célt B-re cseréli, majd az apply H_AB a B célt A-ra, ami már adott.
 
 </details>
 
 <details>
-<summary>2. megoldás (direkt terminus)</summary>
-Coq
+<summary>2. megoldás (direkt term)</summary>
 
+````coq
 Proof.
   intros A B C H_AB H_BC H_A.
   exact (H_BC (H_AB H_A)).
 Qed.
+````
 
-Magyarázat: A bizonyítási terminusok explicit felírásával egy lépésben megadjuk a megoldást.
+Magyarázat: A bizonyításterm explicit felírásával egy lépésben megadjuk a megoldást.
 
 </details>
 
-További Feladatok Megoldásokkal
+**1.4 Láncszabály (más formában)**
 
-1.4 Láncszabály (más formában)
-Coq
-
+````coq
 Example practice_1_1 (A B C : Prop) (H_BC : B -> C) (H_AB : A -> B) : A -> C.
-
+````
 <details>
-<summary>1. megoldás</summary>
-Coq
 
+<summary>1. megoldás</summary>
+````coq
 Proof.
   intros H_A.
   apply H_BC.
   apply H_AB.
   exact H_A.
 Qed.
-
+````
 </details>
+
 <details>
 <summary>2. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros H_A.
   exact (H_BC (H_AB H_A)).
 Qed.
-
+````
 </details>
 
-1.5 Feltételek felhasználása
-Coq
+**1.5 Feltételek felhasználása**
 
+````coq
 Example practice_1_2 (A B C : Prop) (H_A : A) (H_AB : A -> B) : (B -> C) -> C.
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
 
+````coq
 Proof.
   intros H_BC.
   apply H_BC.
   apply H_AB.
   exact H_A.
 Qed.
-
+````
 </details>
 <details>
 <summary>2. megoldás</summary>
 Coq
-
+````coq
 Proof.
   intros H_BC.
   exact (H_BC (H_AB H_A)).
 Qed.
-
+````
 </details>
 
-1.6 Felesleges feltételek
-Coq
+**1.6 Felesleges feltételek**
 
+````coq
 Example practice_1_3 (A B : Prop) : (A -> B) -> (B -> A) -> (A -> A).
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros H_AB H_BA H_A.
   exact H_A.
 Qed.
-
+````
 </details>
 <details>
 <summary>2. megoldás</summary>
-Coq
-
+````coq
 Proof.
-  auto.
+  intros H_AB H_BA.
+  apply problem_I_comb.
 Qed.
-
+````coq
 </details>
 
-2. Rész: A Konjunkció (/\) és az Implikáció
+## 2. Rész: A Konjunkció (/\) és az Implikáció
 
 A konjunkció az „és” kapcsolat. A /\ B azt jelenti, hogy A és B is igaz.
 
