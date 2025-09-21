@@ -22,13 +22,19 @@ Kondicionális: „ha..., akkor...”.
 
 * **Kiküszöbölési szabály (`->E`, Modus Ponens)**:
 
-`A -> B`, de `A` tehát `B`. 
-
 $$\dfrac{A\to B\quad A}{B} $$
 
-Coq parancs: `apply H` - a kondicionális kiküszöbölési szabálya főpremisszájának (A->B) illesztése `H`-ra és a konklúziójának (B) a célra.
+`A -> B`, de `A` tehát `B`. 
 
-* **Bevezetési szabály (`->I`)**: Egy `A -> B` állítás bizonyításához tételezzük fel `A`-t, és ebből vezessük le `B`-t. Ezt Coq-ban az `intros` taktika valósítja meg.
+Coq taktika: `apply H` - a kondicionális kiküszöbölési szabálya főpremisszájának (A->B) illesztése `H`-ra és a konklúziójának (B) a célra.
+
+* **Bevezetési szabály (`->I`, dedukciótétel, függvényképzés)**:
+  
+$$\dfrac{x:A\vdash p(x):B}{\lambda x. p(x):A\to B}$$
+
+Az `A -> B` állítás bizonyításához tételezzük fel `A`-t, és ebből vezessük le `B`-t.
+
+Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának illesztése a célra.
 
 ### Mintapéldák
 
