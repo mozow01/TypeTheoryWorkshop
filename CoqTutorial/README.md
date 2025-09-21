@@ -1,18 +1,18 @@
-# Coq Tutorial: Implikáció és Konjunkció
+# Coq Tutorial
+
+## Alapvető taktikák implikáció és konjunkció
 
 A propozíciós logika (`->`, `/\`) konnektívumainak kezelése Coq-ban. 
 
-## Alapvető Taktikák
+Minden bizonyítási szabályt egy *taktikával* hívunk elő, amely visszakeresi a szabály leékséges feltételeit. A legfontosabbak:
 
-Minden bizonyítási lépést egy *taktikával* hajtunk végre. A legfontosabbak:
-
-* **`intros`**: Nevezzük el a feltételeket és a kvantorált változókat.
-* **`apply H`**: Használjuk fel `H` feltételt a cél bizonyítására.
-* **`exact H`**: A cél pontosan megegyezik `H`-val.
-* **`split`**: A `/\` bizonyítását bontsuk két külön célra.
-* **`destruct H`**: Szedjük szét az összetett `H` feltételt alkotóelemeire.
-* **`assumption`**: A cél már szerepel a feltételeink között.
-* **`auto`**: Coq, ezt próbáld meg te megoldani egyszerű taktikákkal!
+* **`intros`**: az implikáció és az univerzális kvantor bevezetési szabálya konklúziójának illesztése a célra.
+* **`apply H`**: a `H` feltétel alkalmazása célra.
+* **`exact H`**: a cél pontosan megegyezik `H`-val.
+* **`split`**: a konjunkció bevezetési szabályának alkalmazása a célra
+* **`destruct H`**: a konjunkció (és az alternáció) kiküszöbölési szabálya főpremisszája illesztése a H-ra és a konklúziójának a célra 
+* **`assumption`**: a cél megkeresése a feltételeink között.
+* **`auto`**: A Coq legegyszerűbb automatizált bizonyításkeresője. 
 
 ---
 
