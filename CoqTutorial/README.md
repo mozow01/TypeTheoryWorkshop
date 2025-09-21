@@ -42,29 +42,30 @@ Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának ill
 
 ```coq
 Example problem_I_comb : forall A : Prop, A -> A.
+```
 
 <details>
 <summary>1. megoldás (direkt)</summary>
-Coq
-
+```coq
 Proof.
   intros A H.
   exact H.
 Qed.
-
+```
+  
 Magyarázat: Az intros A H bevezeti a Prop típusú A változót és a H : A feltételt. Ekkor a célunk A lesz, ami pontosan megegyezik H-val.
 
 </details>
 
 <details>
 <summary>2. megoldás (assumption)</summary>
-Coq
-
+```coq
 Proof.
   intros A H.
   assumption.
 Qed.
-
+```
+  
 Magyarázat: Az assumption taktika megtalálja, hogy a cél (A) már szerepel a hipotézisek között (H : A), és befejezi a bizonyítást.
 
 </details>
