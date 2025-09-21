@@ -7,7 +7,7 @@ A propozíciós logika (`->`, `/\`) konnektívumainak kezelése Coq-ban.
 Minden bizonyítási szabályt egy *taktikával* hívunk elő, amely visszakeresi a szabály leékséges feltételeit. A legfontosabbak:
 
 * **`intros`**: az implikáció és az univerzális kvantor bevezetési szabálya konklúziójának illesztése a célra.
-* **`apply H`**: a `H` feltétel alkalmazása célra.
+* **`apply H`**: a kondicionális (vagy az univerzális kvantor) kiküszöbölési szabálya főpremisszájának illesztése `H`-ra és a konklúziójának a célra.
 * **`exact H`**: a cél pontosan megegyezik `H`-val.
 * **`split`**: a konjunkció bevezetési szabályának alkalmazása a célra
 * **`destruct H`**: a konjunkció (és az alternáció) kiküszöbölési szabálya főpremisszája illesztése a H-ra és a konklúziójának a célra 
@@ -18,13 +18,16 @@ Minden bizonyítási szabályt egy *taktikával* hívunk elő, amely visszakeres
 
 ## 1. Kondicionális (`->`)
 
-A kondicionális „ha..., akkor...” kapcsolatot fejezi ki.
+Kondicionális: „ha..., akkor...”.
 
 * **Kiküszöbölési szabály (`->E`, Modus Ponens)**:
 
+`A -> B`, de `A` tehát `B`. 
 
+$$\dfrac{A\to B\quad A}{B} $$
 
-`A -> B`, de `A` tehát `B`. Erre az `apply` taktikát használjuk.
+Coq parancs: `apply H` - a kondicionális kiküszöbölési szabálya főpremisszájának (A->B) illesztése `H`-ra és a konklúziójának (B) a célra.
+
 * **Bevezetési szabály (`->I`)**: Egy `A -> B` állítás bizonyításához tételezzük fel `A`-t, és ebből vezessük le `B`-t. Ezt Coq-ban az `intros` taktika valósítja meg.
 
 ### Mintapéldák
