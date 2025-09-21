@@ -230,11 +230,14 @@ Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destru
 ### Mintapéldák
 
 **2.1 Kommutativitás**
+
 ````coq
 Example problem_comm : forall A B : Prop, A /\ B -> B /\ A.
 ````
+
 <details>
 <summary>1. megoldás (destruct + split)</summary>
+
 ````coq
 Proof.
   intros A B H.
@@ -244,12 +247,14 @@ Proof.
   - exact HA.
 Qed.
 ````
+
 Magyarázat: Először destruct-tal szétszedjük az A /\ B feltételt. Utána split-tel kettébontjuk a B /\ A célt. Az első alcél (B) megegyezik HB-vel, a második (A) pedig HA-val.
 
 </details>
 
 <details>
 <summary>2. megoldás (rövidített intros)</summary>
+
 ````coq
 Proof.
   intros A B [HA HB].
