@@ -139,6 +139,7 @@ Example practice_1_1 (A B C : Prop) (H_BC : B -> C) (H_AB : A -> B) : A -> C.
 <details>
 
 <summary>1. megoldás</summary>
+
 ````coq
 Proof.
   intros H_A.
@@ -151,6 +152,7 @@ Qed.
 
 <details>
 <summary>2. megoldás</summary>
+
 ````coq
 Proof.
   intros H_A.
@@ -164,6 +166,7 @@ Qed.
 ````coq
 Example practice_1_2 (A B C : Prop) (H_A : A) (H_AB : A -> B) : (B -> C) -> C.
 ````
+
 <details>
 <summary>1. megoldás</summary>
 
@@ -175,16 +178,18 @@ Proof.
   exact H_A.
 Qed.
 ````
+
 </details>
 <details>
 <summary>2. megoldás</summary>
-Coq
+
 ````coq
 Proof.
   intros H_BC.
   exact (H_BC (H_AB H_A)).
 Qed.
 ````
+
 </details>
 
 **1.6 Felesleges feltételek**
@@ -192,23 +197,28 @@ Qed.
 ````coq
 Example practice_1_3 (A B : Prop) : (A -> B) -> (B -> A) -> (A -> A).
 ````
+
 <details>
 <summary>1. megoldás</summary>
+  
 ````coq
 Proof.
   intros H_AB H_BA H_A.
   exact H_A.
 Qed.
 ````
+
 </details>
 <details>
 <summary>2. megoldás</summary>
-````coq
+
+```coq
 Proof.
   intros H_AB H_BA.
   apply problem_I_comb.
 Qed.
 ````coq
+
 </details>
 
 ## 2. Rész: A konjunkció ( /\ ) és a koncicionális
@@ -269,11 +279,14 @@ Magyarázat: Az intros is képes destruálni. Az intros [HA HB] egyből szétsze
 </details>
 
 **2.2 Currying**
+
 ````coq
 Example problem_curry : forall A B C : Prop, ((A /\ B) -> C) -> (A -> B -> C).
 ````
+
 <details>
 <summary>1. megoldás</summary>
+
 ````coq
 Proof.
   intros A B C H H_A H_B.
@@ -283,24 +296,30 @@ Proof.
   - exact H_B.
 Qed.
 ````
+
 Magyarázat: A cél C, amihez a H feltétel (A /\ B)-t kér. Ezt a split segítségével, H_A-ból és H_B-ből rakjuk össze.
 
 </details>
 <details>
 <summary>2. megoldás (auto)</summary>
+
 ````coq
 Proof.
   auto. (* ezt az AI csinálta, majd lesz tanukságosabb :D *)
 Qed.
 ````
+
 </details>
 
 **2.3 Uncurrying**
+
 ````coq
 Example problem_uncurry : forall A B C : Prop, (A -> B -> C) -> ((A /\ B) -> C).
 ````
+
 <details>
 <summary>1. megoldás (destruct)</summary>
+
 ````coq
 Proof.
   intros A B C H H_AB.
@@ -310,6 +329,7 @@ Proof.
   - exact HB.
 Qed.
 ````
+
 Magyarázat: A H : A -> B -> C feltétel alkalmazásához két argumentum kell: egy A és egy B. Ezeket a destruct H_AB segítségével nyerjük ki.
 
 </details>
