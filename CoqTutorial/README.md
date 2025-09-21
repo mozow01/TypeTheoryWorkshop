@@ -215,13 +215,13 @@ Qed.
 
 Konjunkció: ... és ... ( A /\ B ).
 
-* **Bevezetési szabály (/\I):**
+* **Bevezetési szabály (/\ I):**
 
 $$\dfrac{A\qquad B}{A\land B}\qquad \dfrac{\vdash a: A \quad \vdash b:B}{\vdash \text{conj}ab:A\land B}$$
 
 A /\ B bizonyításához le kell vezetni A-t is és B-t is külön-külön, ezt a `split` taktika hívja elő.
 
-* **Kiküszöbölési szabály (/\E):**
+* **Kiküszöbölési szabály (/\ E):**
 
 $$\dfrac{A_1\land A_2}{A_i}\quad (i=1;2)\qquad \dfrac{\vdash p:A_1\land A_2}{\vdash \text{proj}_i \; p:A_i} \quad (i=1;2)$$
 
@@ -229,51 +229,47 @@ Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destru
 
 ### Mintapéldák
 
-2.1 Kommutativitás
-Coq
-
+**2.1 Kommutativitás**
+````coq
 Example problem_comm : forall A B : Prop, A /\ B -> B /\ A.
-
+````
 <details>
 <summary>1. megoldás (destruct + split)</summary>
-Coq
-
+````coq
 Proof.
   intros A B H.
   destruct H as [HA HB].
   split.
-  - exact HB.
+  - exact HB. (*az indentelés célra fókuszál*)
   - exact HA.
 Qed.
-
+````
 Magyarázat: Először destruct-tal szétszedjük az A /\ B feltételt. Utána split-tel kettébontjuk a B /\ A célt. Az első alcél (B) megegyezik HB-vel, a második (A) pedig HA-val.
 
 </details>
 
 <details>
 <summary>2. megoldás (rövidített intros)</summary>
-Coq
-
+````coq
 Proof.
   intros A B [HA HB].
   split.
   - assumption.
   - assumption.
 Qed.
+````
 
 Magyarázat: Az intros is képes destruálni. Az intros [HA HB] egyből szétszedi a következő bevezetendő /\ típusú hipotézist.
 
 </details>
 
-2.2 Curry-Howard izomorfizmus (Currying)
-Coq
-
+**2.2 Currying**
+````coq
 Example problem_curry : forall A B C : Prop, ((A /\ B) -> C) -> (A -> B -> C).
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros A B C H H_A H_B.
   apply H.
@@ -281,29 +277,26 @@ Proof.
   - exact H_A.
   - exact H_B.
 Qed.
-
+````
 Magyarázat: A cél C, amihez a H feltétel (A /\ B)-t kér. Ezt a split segítségével, H_A-ból és H_B-ből rakjuk össze.
 
 </details>
 <details>
 <summary>2. megoldás (auto)</summary>
-Coq
-
+````coq
 Proof.
-  auto.
+  auto. (* ezt az AI csinálta, majd lesz tanukságosabb :D *)
 Qed.
-
+````
 </details>
 
-2.3 Curry-Howard izomorfizmus (Uncurrying)
-Coq
-
+**2.3 Uncurrying**
+````coq
 Example problem_uncurry : forall A B C : Prop, (A -> B -> C) -> ((A /\ B) -> C).
-
+````
 <details>
 <summary>1. megoldás (destruct)</summary>
-Coq
-
+````coq
 Proof.
   intros A B C H H_AB.
   destruct H_AB as [HA HB].
@@ -311,34 +304,30 @@ Proof.
   - exact HA.
   - exact HB.
 Qed.
-
+````
 Magyarázat: A H : A -> B -> C feltétel alkalmazásához két argumentum kell: egy A és egy B. Ezeket a destruct H_AB segítségével nyerjük ki.
 
 </details>
 <details>
 <summary>2. megoldás (rövidített intros)</summary>
-Coq
 
+````coq
 Proof.
   intros A B C H [HA HB].
   apply H.
   - assumption.
   - assumption.
 Qed.
-
+````
 </details>
 
-További Feladatok Megoldásokkal
-
-2.4 Disztributivitás
-Coq
-
+**2.4 Disztributivitás**
+````coq
 Example practice_2_1 : forall A B C : Prop, (A -> B /\ C) -> (A -> B) /\ (A -> C).
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros A B C H.
   split.
@@ -351,18 +340,17 @@ Proof.
     destruct HA as [HB HC].
     exact HC.
 Qed.
-
+````
 </details>
 <details>
 <summary>2. megoldás (assert)</summary>
-Coq
-
+````coq
 Proof.
   intros A B C H.
   split.
   - intros HA.
     assert (K : B /\ C).
-    { apply H. exact HA. }
+    { apply H. exact HA. } (* assert után illik fókuszálni zárójellel*)
     destruct K as [HB HC].
     exact HB.
   - intros HA.
@@ -370,18 +358,18 @@ Proof.
     { apply H; assumption. }
     destruct K; assumption.
 Qed.
-
+````
 </details>
 
-2.5 Disztributivitás fordítva
-Coq
+### További feladatok megoldásokkal
 
+**2.5 Disztributivitás fordítva**
+````coq
 Example practice_2_2 : forall A B C : Prop, (A -> B) /\ (A -> C) -> (A -> B /\ C).
 
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros A B C H.
   destruct H as [H_AB H_AC].
@@ -390,146 +378,57 @@ Proof.
   - apply H_AB. exact HA.
   - apply H_AC. exact HA.
 Qed.
-
+````
 </details>
 <details>
 <summary>2. megoldás (rövidítve)</summary>
-Coq
-
+````coq
 Proof.
   intros A B C [H_AB H_AC] HA.
   split.
   - apply H_AB; assumption.
   - apply H_AC; assumption.
 Qed.
-
+````
 </details>
 
-2.6 Modus Ponens /\-val
-Coq
-
+**2.6 Modus Ponens /\ -val**
+````coq
 Example practice_2_3 : forall A B : Prop, A /\ (A -> B) -> B.
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros A B H.
   destruct H as [HA H_AB].
   apply H_AB.
   exact HA.
 Qed.
-
+````
 </details>
 <details>
 <summary>2. megoldás (rövidített intros)</summary>
-Coq
-
+````coq
 Proof.
   intros A B [HA H_AB].
   apply H_AB; assumption.
 Qed.
-
+  ````
 </details>
 
-2.7 Összerakás
-Coq
-
+**2.7 És bevezetés**
+````coq
 Example practice_2_4 : forall A B : Prop, A -> B -> A /\ B.
-
+````
 <details>
 <summary>1. megoldás</summary>
-Coq
-
+````coq
 Proof.
   intros A B HA HB.
   split.
   - exact HA.
   - exact HB.
 Qed.
-
-</details>
-<details>
-<summary>2. megoldás (auto)</summary>
-Coq
-
-Proof.
-  auto.
-Qed.
-
-</details>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Egyszerű logikai feladatok ##
-
-Igazold Coq-ban az alábbi állításokat!
-
-1.1
-
-```coq
-Example problem_1 : forall A B : Prop, A /\ B -> B /\ A.
-```
-<details>
-  <summary>1. megoldás.</summary>
-  
-```destruct``` taktikával és ```split```-tel:
-  
-```coq
-Proof.
-intros A B H.
-destruct H as [H1 H2].
-split.
- - exact H2.
- - exact H1.
-Qed.
-```
-</details>
-
-<details>
-  <summary>2. megoldás.</summary>
-  
-```induction``` taktikával:
-
-```coq
-Proof.
-intros A B H.
-induction H as [a b].
-Print conj.
-exact (conj b a).
-Qed.
-```
-</details>
-
-1.2. 
-
-```coq
-Example problem_2 : forall A B C : Prop, (A -> B /\ C) -> (A -> B) /\ (A -> C).
-```
-<details>
-  <summary>Megoldás.</summary>
-  
-```destruct``` taktikával és ```split```-tel:
-  
-```coq
-Proof.
-intros A B H.
-destruct H as [H1 H2].
-split.
- - exact H2.
- - exact H1.
-Qed.
-```
+````
 </details>
