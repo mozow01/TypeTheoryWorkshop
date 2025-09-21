@@ -40,18 +40,19 @@ Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának ill
 
 **1.1 Identitás (Reflexivitás)**
 
-```coq
+````coq
 Example problem_I_comb : forall A : Prop, A -> A.
-```
+````
 
 <details>
 <summary>1. megoldás (direkt)</summary>
-```coq
+  
+````coq
 Proof.
   intros A H.
   exact H.
 Qed.
-```
+````
   
 Magyarázat: Az intros A H bevezeti a Prop típusú A változót és a H : A feltételt. Ekkor a célunk A lesz, ami pontosan megegyezik H-val.
 
