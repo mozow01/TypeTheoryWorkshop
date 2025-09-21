@@ -223,7 +223,7 @@ A /\ B bizonyításához le kell vezetni A-t is és B-t is külön-külön, ezt 
 
 * **Kiküszöbölési szabály (/\E):**
 
-$$\dfrac{A_1\land A_2}{A_i}\quad (i=1;2)\qquad \dfrac{\vdash p:A_1\land A_2}{\vdash \text{proj}i\,p:A_i} \quad (i=1;2)$$
+$$\dfrac{A_1\land A_2}{A_i}\quad (i=1;2)\qquad \dfrac{\vdash p:A_1\land A_2}{\vdash \text{proj}_i \; p:A_i} \quad (i=1;2)$$
 
 Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destruct H as [HA HB]` taktika egy `H : A /\ B` hipotézist két új hipotézisre bont: `HA : A` és `HB : B`.
 
