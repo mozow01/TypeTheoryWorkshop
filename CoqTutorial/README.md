@@ -22,7 +22,7 @@ Kondicionális: „ha..., akkor...”.
 
 * **Kiküszöbölési szabály (`->E`, Modus Ponens)**:
 
-$$\dfrac{A\to B\quad A}{B} $$
+$$\dfrac{A\to B\quad A}{B} \qquad \dfrac{\vdash f:A\to B\quad \vdash a:A}{\vdash f a : B} $$
 
 `A -> B`, de `A` tehát `B`. 
 
@@ -30,7 +30,7 @@ Coq taktika: `apply H` - a kondicionális kiküszöbölési szabálya főpremiss
 
 * **Bevezetési szabály (`->I`, dedukciótétel, függvényképzés)**:
   
-$$\dfrac{x:A\vdash p(x):B}{\lambda x. p(x):A\to B}$$
+$$\dfrac{\begin{matrix}A\\\vdots\\B\end{matrix}}{A\to B} \qquad\dfrac{x:A\vdash p(x):B}{\vdash\lambda x. p(x):A\to B}$$
 
 Az `A -> B` állítás bizonyításához tételezzük fel `A`-t, és ebből vezessük le `B`-t.
 
