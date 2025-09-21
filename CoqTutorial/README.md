@@ -30,7 +30,7 @@ Coq taktika: `apply H` - a kondicionális kiküszöbölési szabálya főpremiss
 
 * **Bevezetési szabály (`->I`, dedukciótétel, függvényképzés)**:
   
-$$\dfrac{\begin{matrix}A\\ \vdots \\ B\end{matrix}}{A\to B} \qquad\dfrac{x:A\vdash p(x):B}{\vdash\lambda x. p(x):A\to B}$$
+$$\dfrac{\begin{matrix} A \\ \vdots \\ B \end{matrix}}{A\to B} \qquad\dfrac{x:A\vdash p(x):B}{\vdash\lambda x. p(x):A\to B}$$
 
 Az `A -> B` állítás bizonyításához tételezzük fel `A`-t, és ebből vezessük le `B`-t.
 
