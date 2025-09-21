@@ -73,7 +73,7 @@ Magyarázat: Az assumption taktika megtalálja, hogy a cél (A) már szerepel a 
 </details>
 
 
-**1.2 Weakening (az igaz mindenből következik)**
+**1.2 Weakening (az igaz mindenből következik, K-kombinátor)**
 
 ````coq
 Example problem_verum_ex : forall A B : Prop, A -> (B -> A).
@@ -93,7 +93,7 @@ Magyarázat: Két intros-szal bevezetjük az összes feltételt. A cél (A) már
 </details>
 
 
-**1.3 Láncszabály**
+**1.3 Láncszabály (S-kobinátor)**
 
 ````coq
 Example problem_chain : forall A B C : Prop, (A -> B) -> (B -> C) -> (A -> C).
@@ -128,6 +128,8 @@ Qed.
 Magyarázat: A bizonyításterm explicit felírásával egy lépésben megadjuk a megoldást.
 
 </details>
+
+### Gyakorló példák
 
 **1.4 Láncszabály (más formában)**
 
@@ -209,15 +211,23 @@ Qed.
 ````coq
 </details>
 
-## 2. Rész: A Konjunkció (/\) és az Implikáció
+## 2. Rész: A konjunkció ( /\ ) és a koncicionális
 
-A konjunkció az „és” kapcsolat. A /\ B azt jelenti, hogy A és B is igaz.
+Konjunkció: ... és ... ( A /\ B ).
 
-    Bevezetési szabály (/\I): Egy A /\ B állítás bizonyításához le kell vezetni A-t is és B is külön-külön. Ezt a split taktikával tehetjük meg, ami a célt két alcélra bontja.
+* **Bevezetési szabály (/\I):**
 
-    Kiküszöbölési szabály (/\E): Ha tudjuk, hogy A /\ B igaz, akkor tudjuk A-t és tudjuk B is. A destruct H as [HA HB] taktika egy H : A /\ B hipotézist két új hipotézisre bont: HA : A és HB : B.
+$$\dfrac{A\qquad B}{A\land B}\qquad \dfrac{\vdash a: A \quad \vdash b:B}{\vdash \text{conj}ab:A\land B}$$
 
-Mintapéldák
+A /\ B bizonyításához le kell vezetni A-t is és B-t is külön-külön, ezt a `split` taktika hívja elő.
+
+* **Kiküszöbölési szabály (/\E):**
+
+$$\dfrac{A_1\land A_2}{A_i}\quad (i=1;2)\qquad \dfrac{\vdash p:A_1\land A_2}{\vdash \text{proj}i\,p:A_i} \quad (i=1;2)$$
+
+Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destruct H as [HA HB]` taktika egy `H : A /\ B` hipotézist két új hipotézisre bont: `HA : A` és `HB : B`.
+
+### Mintapéldák
 
 2.1 Kommutativitás
 Coq
