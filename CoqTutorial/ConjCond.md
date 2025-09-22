@@ -1,4 +1,4 @@
-## 2. Rész: A konjunkció ( /\ ) és a koncicionális
+## 2. Rész: A konjunkció ( /\ ) és a kondicionális
 
 Konjunkció: ... és ... ( A /\ B ).
 
