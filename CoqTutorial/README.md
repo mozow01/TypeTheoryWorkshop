@@ -40,7 +40,7 @@ Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának ill
 
 [https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/Imp.md] 
 
-## Konjunkció
+## Konjunkció ( /\ )
 
 Konjunkció: ... és ... ( A /\ B ).
 
