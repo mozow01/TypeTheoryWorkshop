@@ -1,6 +1,6 @@
 # Coq Tutorial
 
-## Alapvető taktikák implikáció és konjunkció
+## Alapvető taktikák (kondicionális) implikáció és konjunkció
 
 A propozíciós logika (`->`, `/\`) konnektívumainak kezelése Coq-ban. 
 
