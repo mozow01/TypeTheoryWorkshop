@@ -38,7 +38,7 @@ Coq taktika: a kondicionális (A->B) bevezetési szabálya konklúziójának ill
 
 ### Feladatok: 
 
-[https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/Imp.md] 
+https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/Imp.md
 
 ## Konjunkció ( /\ )
 
@@ -58,4 +58,4 @@ Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destru
 
 ### Feladatok: 
 
-[https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/ConjCond.md]
+https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/ConjCond.md
