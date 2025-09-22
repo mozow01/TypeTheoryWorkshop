@@ -58,5 +58,4 @@ Ha tudjuk, hogy A /\ B levezethető, akkor A is és B is levezethető. A `destru
 
 ### Feladatok: 
 
-[https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/CondConj.md] 
-
+[https://github.com/mozow01/TypeTheoryWorkshop/blob/main/CoqTutorial/ConjCond.md]
