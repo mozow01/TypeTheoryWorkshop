@@ -370,7 +370,17 @@ Proof.
   reflexivity.
 Defined.
 
+Definition IdentityFunctor (C : Category) : CovariantFunctor C C.
+Proof.
+  apply mk_Functor with
+    (F_Obj := fun x => x)
+    (F_Hom := fun _ _ f => f).
+  - intros; reflexivity.
+  - intros; reflexivity.
+Defined.
+
 (*Indexed Category plus pushforwards*)
+
 
 Class GoodFibration (B : Category) := mk_GoodFibration {
   Fiber : @Obj B -> Category;
@@ -378,12 +388,19 @@ Class GoodFibration (B : Category) := mk_GoodFibration {
 
   Pullback {I J} : (I → J) -> CovariantFunctor (Fiber J) (Fiber I);
 
+  pullback_preserves_id {I} :
+    Pullback (Id I) = IdentityFunctor (Fiber I);
+
+  pullback_preserves_comp {I J K} (g : J → K) (f : I → J) :
+    Pullback (g ∘ f) = ComposeFunctors (Pullback g) (Pullback f); 
+
   pullback_has_left_adjoint {I J} (f : I → J) :
     @IsRightAdjoint (Fiber J) (Fiber I) (Pullback f);
 
   pullback_has_right_adjoint {I J} (f : I → J) :
     @IsLeftAdjoint (Fiber I) (Fiber J) (Pullback f)
 }.
+
 
 Definition Sigma_f {B} {LF : GoodFibration B} {I J} (f : I → J)
   : CovariantFunctor (Fiber I) (Fiber J).
@@ -411,7 +428,6 @@ Definition bang (B : Category) (TSC : TwoSortCategory B) : Hom S One :=
   terminal_mor S.
 
 
-(* A standard `(∃x:S)` egzisztenciális kvantor. *)
 Definition ExistsQuantifier (B : Category) {GF : GoodFibration B} {TSC : TwoSortCategory B}
   : CovariantFunctor (Fiber S) (Fiber One).
 Proof.
