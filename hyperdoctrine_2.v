@@ -1,12 +1,5 @@
-(** hyperdoctrine_2.v *)
-(** Készült a hyperdoctrine_1.v és STT_CCC_PI_eqmor_2.v egyesítésével és tisztításával. *)
-
 Require Import List.
 Import ListNotations.
-
-(* ========================================================================= *)
-(* 1. KATEGÓRIA DEFINÍCIÓ (STT_CCC_PI alapján)                               *)
-(* ========================================================================= *)
 
 (** Kategória definíciója EqMor ekvivalenciarelációval  *)
 Class Category := cat_mk {
@@ -24,7 +17,7 @@ Class Category := cat_mk {
   Eq_trans : forall {x y} (f g h : Hom x y), EqMor f g -> EqMor g h -> EqMor f h;
   Eq_sim : forall {x y} (f g : Hom x y), EqMor f g -> EqMor g f;
   
-  (* Kongruencia és Kategória Axiómák *)
+  (* Kongruencia és kategória axiómák *)
   assoc : forall x y z w (f : (Hom z w)) (g:(Hom y z)) (h:(Hom x y)),
         EqMor (Compose f (Compose g h) ) (Compose (Compose f g) h);
   id_1 : forall x y (f : (Hom x y)), EqMor (Compose f (Id x)) f;
@@ -36,10 +29,6 @@ Class Category := cat_mk {
 Notation "x → y" := (Hom x y) (at level 90, right associativity) : type_scope.
 Notation "f ∘ g" := (Compose f g) (at level 40, left associativity) : type_scope.
 Notation "f ≅ g" := (EqMor f g) (at level 40, no associativity) : type_scope.
-
-(* ========================================================================= *)
-(* 2. CARTESIAN CLOSED CATEGORY (STT_CCC_PI alapján)                         *)
-(* ========================================================================= *)
 
 (** CCC definíciója, amely illeszkedik az EqMor alapú kategóriához  *)
 Class CartClosedCat (C : Category) := CartClosedCat_mk {
@@ -55,7 +44,7 @@ Class CartClosedCat (C : Category) := CartClosedCat_mk {
   Exp_app : forall {y z}, (Prod_obj (Exp_obj z y) y) → z;
   Lam : forall {x y z} (g : (Prod_obj x y) → z), x → (Exp_obj z y);
   
-  (* Axiómák EqMor (≅) használatával *)
+  (* Egyenlőségek EqMor (≅) használatával *)
   unique_top : forall {x} (f : x → Top_obj), f ≅ Top_mor;
   prod_ax_1 : forall {x y z} (f : x → y) (g : x → z), First ∘ (Prod_mor f g) ≅ f;
   prod_ax_2 : forall {x y z} (f : x → y) (g : x → z), Second ∘ (Prod_mor f g) ≅ g;
@@ -71,36 +60,23 @@ Class CartClosedCat (C : Category) := CartClosedCat_mk {
 Require Import Coq.Setoids.Setoid.
 Require Import Coq.Classes.Morphisms.
 
-(* 1. Regisztráljuk az EqMor-t mint átíró relációt (Setoid) *)
-(* A @ jelek használata biztosítja, hogy a megfelelő definíciókat érjük el *)
+(* 1. Dekraláljuk az EqMor-t mint átíró relációt (Setoid) *)
 Add Parametric Relation (C : Category) (x y : @Obj C) : (@Hom C x y) (@EqMor C x y)
   reflexivity proved by (@Eq_ref C x y)
   symmetry proved by (@Eq_sim C x y)
   transitivity proved by (@Eq_trans C x y)
   as eqmor_rel.
 
-(* 2. Megtanítjuk a Coq-nak, hogy a Kompozíció (Compose) mindkét oldalon 
+(* 2. Megtanítjuk a Coq-nak, hogy a kompozíció (Compose) mindkét oldalon 
       tiszteletben tartja az egyenlőséget (Proper instance) *)
 Instance compose_proper (C : Category) (x y z : @Obj C) : 
   Proper (@EqMor C y z ==> @EqMor C x y ==> @EqMor C x z) (@Compose C x y z).
 Proof.
-  (* Ez azt mondja: ha f ≅ f' és g ≅ g', akkor f ∘ g ≅ f' ∘ g' *)
-  do 2 red. intros f f' Hf g g' Hg.
+  do 2 red. intros f f' Hf g g' Hg. (* 2 mélységben unfoldol a do 2 red*)
   eapply eq_cong; assumption.
 Defined.
 
-(* 3. Megtanítjuk, hogy minden CovariantFunctor tiszteletben tartja az egyenlőséget *)
-(* Fontos: Ezt a CovariantFunctor definiálása UTÁN tudod csak lefuttatni! *)
-(* Tehát ezt a blokkot tedd a CovariantFunctor Class definíciója után, de az Instance-ok elé. *)
-
-(* ========================================================================= *)
-(* 3. FUNKTOROK ÉS TERMÉSZETES TRANSZFORMÁCIÓK (Adaptálva)                   *)
-(* ========================================================================= *)
- 
-(** Kovariáns Funktor definíciója, adaptálva az EqMor használatához.
-    Fontos változás: F_mor mező, ami biztosítja, hogy a funktor tiszteli az ekvivalenciát. *)
-(** Kovariáns Funktor definíciója, adaptálva az EqMor használatához.
-    Fontos változás: F_mor mező, ami biztosítja, hogy a funktor tiszteli az ekvivalenciát. *)
+(** Kovariáns Funktor definíciója, adaptálva az EqMor használatához. F_mor mező biztosítja, hogy a funktor tiszteli az ekvivalenciát. *)
 Class CovariantFunctor (C : Category) (D : Category) := mk_Functor {
   F_Obj : @Obj C -> @Obj D;
   F_Hom : forall (x y : @Obj C), (x → y) -> (F_Obj x → F_Obj y);
@@ -108,16 +84,14 @@ Class CovariantFunctor (C : Category) (D : Category) := mk_Functor {
   (* Az ekvivalencia megőrzése *)
   F_mor : forall (x y : @Obj C) (f g : x → y), f ≅ g -> (F_Hom x y f) ≅ (F_Hom x y g);
   
-  (* Axiómák *)
+  (* Egyenlőségek *)
   F_id : forall (x : @Obj C), F_Hom x x (Id x) ≅ Id (F_Obj x);
   
-  (* JAVÍTÁS: Zárójelek használata a jobb oldalon a precedencia hiba elkerülésére *)
   F_comp : forall (x y z : @Obj C) (g : y → z) (f : x → y),
     F_Hom x z (g ∘ f) ≅ ((F_Hom y z g) ∘ (F_Hom x y f));
 }.
 
 
-(* Compose Functors definiálása [cite: 268] *)
 Definition ComposeFunctors {C D E : Category}
   (F : CovariantFunctor C D) (G : CovariantFunctor D E) : CovariantFunctor C E.
 Proof.
@@ -139,17 +113,13 @@ Proof.
     apply F_comp.
 Defined.
 
-(* ========================================================================= *)
-(* 4. ADJUNKCIÓK (Adaptálva)                                                 *)
-(* ========================================================================= *)
-
-(** Bal adjungált[cite: 223], EqMor (≅) használatával *)
+(** Bal adjungált EqMor (≅) használatával *)
 Class IsLeftAdjoint (C D : Category) (F : CovariantFunctor D C) := mk_IsLeftAdjoint {
   rightadjobj : @Obj C -> @Obj D;
   epsilon : forall (X : @Obj C), (@F_Obj D C F (rightadjobj X)) → X;
   rightadjmor : forall {Y : @Obj D} {X : @Obj C} (f : (@F_Obj D C F Y) → X), Y → (rightadjobj X);
   
-  (* A morfizmus leképezésnek is tiszteletben kell tartania az ekvivalenciát *)
+  (* A morfizmus leképezésnek is tisztelet tartja az ekvivalenciát *)
   rightadjmor_cong : forall {Y X} (f g : (@F_Obj D C F Y) → X), f ≅ g -> rightadjmor f ≅ rightadjmor g;
 
   (* Lambek törvények ≅-vel *)
@@ -159,7 +129,7 @@ Class IsLeftAdjoint (C D : Category) (F : CovariantFunctor D C) := mk_IsLeftAdjo
     rightadjmor ((epsilon X) ∘ (@F_Hom D C F _ _ h)) ≅ h
 }.
 
-(** Jobb adjungált[cite: 228], EqMor (≅) használatával *)
+(** Jobb adjungált EqMor (≅) használatával *)
 Class IsRightAdjoint {C D : Category} (G : CovariantFunctor C D) := mk_IsRightAdjoint {
   leftadjobj : @Obj D -> @Obj C;
   unit : forall (Y : @Obj D), Y → (@F_Obj C D G (leftadjobj Y));
@@ -172,16 +142,10 @@ Class IsRightAdjoint {C D : Category} (G : CovariantFunctor C D) := mk_IsRightAd
   lambek_2_dual : forall {X : @Obj D} {Y : @Obj C} (f : (leftadjobj X) → Y),
     leftadjmor ((@F_Hom C D G _ _ f) ∘ (unit X)) ≅ f
 }.
-(* ========================================================================= *)
-(* 4. ADJUNKCIÓK (Folytatás - Proper Instance-ok beszúrása)                  *)
-(* ========================================================================= *)
-
-(* Ezt szúrd be a Class IsRightAdjoint definíciója UTÁN: *)
 
 (* Megtanítjuk a Coq-nak, hogy a 'rightadjmor' tiszteletben tartja az EqMor-t *)
 Instance rightadjmor_proper (C D : Category) (F : CovariantFunctor D C) 
     (LA : IsLeftAdjoint C D F) (Y : @Obj D) (X : @Obj C) :
-    (* ITT VOLT A HIBA: @ jelek pótolva az F_Obj és rightadjobj elé *)
     Proper (@EqMor C (@F_Obj D C F Y) X ==> @EqMor D Y (@rightadjobj C D F LA X)) 
     (@rightadjmor C D F LA Y X).
 Proof.
@@ -189,7 +153,7 @@ Proof.
   apply rightadjmor_cong. assumption.
 Defined.
 
-(* Ugyanez a bal adjungáltra (leftadjmor), hogy később ne legyen vele gond *)
+(* A bal adjungáltra (leftadjmor)  tiszteletben tartja az EqMor-*)
 Instance leftadjmor_proper (C D : Category) (G : CovariantFunctor C D) 
     (RA : IsRightAdjoint G) (X : @Obj D) (Y : @Obj C) :
     Proper (@EqMor D X (@F_Obj C D G Y) ==> @EqMor C (@leftadjobj C D G RA X) Y)
@@ -198,10 +162,7 @@ Proof.
   do 2 red. intros f g H.
   apply leftadjmor_cong. assumption.
 Defined.
-(* ========================================================================= *)
-(* Ezután jöhet a RightAdjFunc, ami most már működni fog a rewrite-tal:      *)
-(* ========================================================================= *)
-
+ 
 Instance RightAdjFunc (C D : Category) (F : CovariantFunctor D C) (FLAdj : IsLeftAdjoint C D F) :
    CovariantFunctor C D.
 Proof.
@@ -235,8 +196,7 @@ Proof.
     rewrite assoc.      (* (epsilon ∘ F(...)) ∘ F(...) *)
     rewrite lambek_1.   (* (g ∘ epsilon) ∘ F(...) *)
     rewrite <- assoc.   (* g ∘ (epsilon ∘ F(...)) *)
-    
-    (* JELENLEGI ÁLLAPOT: *)
+   
     (* Bal oldal: (g ∘ f) ∘ epsilon *)
     (* Jobb oldal: g ∘ (epsilon ∘ F (rightadjmor (f ∘ epsilon))) *)
     
@@ -311,10 +271,6 @@ Proof.
       apply Eq_ref.
 Defined.
 
-(* ========================================================================= *)
-(* 5. OBJEKTUM IZOMORFIZMUS ÉS GOOD FIBRATION                                *)
-(* ========================================================================= *)
-
 (** Két objektum izomorf, ha van köztük oda-vissza út, ami identitást ad.
     Ez helyettesíti a szigorú egyenlőséget (=) a GoodFibration-ben. *)
 Class Iso {C : Category} (A B : @Obj C) := {
@@ -327,7 +283,7 @@ Class Iso {C : Category} (A B : @Obj C) := {
 
 Notation "A ≅O B" := (Iso A B) (at level 40) : type_scope.
 
-(** GoodFibration definíciója "megúszós" (pontonkénti izomorfizmus) módszerrel. *)
+(** GoodFibration definíciója izomorfizmussal mint objektum-egyenlőséggel. *)
 Class GoodFibration (B : Category) := mk_GoodFibration {
   Fiber : @Obj B -> Category;
   Fiber_is_CCC : forall I : @Obj B, CartClosedCat (Fiber I);
@@ -335,7 +291,6 @@ Class GoodFibration (B : Category) := mk_GoodFibration {
   (* Pullback funktor: (I -> J) morfizmushoz rendel egy funktort visszafelé *)
   Pullback {I J} : (I → J) -> CovariantFunctor (Fiber J) (Fiber I);
 
-  (* AXIÓMÁK: Szigorú egyenlőség (=) helyett izomorfizmust (≅O) kérünk az objektumokra. *)
   
   (* 1. Pullback (Id) A ≅O A *)
   (* Azaz: A[id] izomorf A-val. *)
@@ -348,49 +303,33 @@ Class GoodFibration (B : Category) := mk_GoodFibration {
       (@F_Obj (Fiber K) (Fiber I) (Pullback (g ∘ f)) A) ≅O 
       (@F_Obj (Fiber J) (Fiber I) (Pullback f) (@F_Obj (Fiber K) (Fiber J) (Pullback g) A));
 
-  (* Adjungáltak létezése (ezek változatlanok, itt nincs szükség egyenlőségre) *)
-  (* A Sigma kvantor (bal adjungált) létezése *)
+  (* Bal adjungált (Sigma ) létezése *)
   pullback_has_left_adjoint {I J} (f : I → J) :
       @IsRightAdjoint (Fiber J) (Fiber I) (Pullback f);
       
-  (* A Pi kvantor (jobb adjungált) létezése *)
+  (* Jobb adjungált (Pi) létezése *)
   pullback_has_right_adjoint {I J} (f : I → J) :
       @IsLeftAdjoint (Fiber I) (Fiber J) (Pullback f)
-}.
+}. 
 
-(* ========================================================================= *)
-(* 6. KVANTOROK (Sigma és Pi)                                                *)
-(* ========================================================================= *)
 
-(** Sigma_f (Exisztenciális kvantor általánosítva egy f morfizmus mentén).
-    Ez a Pullback funktor bal adjungáltja. *)
 Definition Sigma_f {B} {LF : GoodFibration B} {I J} (f : I → J)
   : CovariantFunctor (Fiber I) (Fiber J).
 Proof.
-  (* Lekérjük a bizonyítékot, hogy a Pullback-nek van bal adjungáltja *)
-  pose proof (@pullback_has_left_adjoint B LF I J f) as adj_proof.
-  (* Ebből legyártjuk a funktort a LeftAdjFunc segítségével *)
-  exact (LeftAdjFunc (Fiber I) (Fiber J) (Pullback f) adj_proof).
+   pose proof (@pullback_has_left_adjoint B LF I J f) as adj_proof.
+   exact (LeftAdjFunc (Fiber I) (Fiber J) (Pullback f) adj_proof).
 Defined.
 
-(** Pi_f (Univerzális kvantor általánosítva egy f morfizmus mentén).
-    Ez a Pullback funktor jobb adjungáltja. *)
 Definition Pi_f {B} {LF : GoodFibration B} {I J} (f : I → J)
   : CovariantFunctor (Fiber I) (Fiber J).
 Proof.
-  (* Lekérjük a bizonyítékot, hogy a Pullback-nek van jobb adjungáltja *)
   pose proof (@pullback_has_right_adjoint B LF I J f) as adj_proof.
-  (* Ebből legyártjuk a funktort a RightAdjFunc segítségével *)
   exact (RightAdjFunc (Fiber I) (Fiber J) (Pullback f) adj_proof).
 Defined.
 
-(* ========================================================================= *)
-(* 7. TWO SORT CATEGORY ÉS LOGIKAI KVANTOROK                                 *)
-(* ========================================================================= *)
-
-(** Alap kategória struktúra két fajtával (típussal):
-    - One: Terminális objektum (a "kontextus nélküli" állítások helye)
-    - S: Az individuumok típusa (amin kvantálunk) *)
+(** Base kategória struktúra két fajtával (típussal):
+    - One: Terminális objektum (a "kontextus nélküli" állítások indexe, nulla változós formulák típusindexe )
+    - S: Az individuumok típusa (amin kvantifikálunk) *)
 Class TwoSortCategory (B : Category) := mk_TwoSortCategory {
   One : @Obj B;
   terminal_mor : forall X, X → One;
@@ -399,7 +338,7 @@ Class TwoSortCategory (B : Category) := mk_TwoSortCategory {
   terminal_mor_unique : forall X (f : X → One), f ≅ terminal_mor X;
   
   S : @Obj B;
-  (* S nem lehet a terminális objektum (hogy legyen értelme a logikának) *)
+  (* S nem lehet a terminális objektum *)
   S_is_not_Terminal : S <> One 
 }.
 
@@ -407,7 +346,7 @@ Class TwoSortCategory (B : Category) := mk_TwoSortCategory {
 Definition bang (B : Category) (TSC : TwoSortCategory B) : Hom S One :=
   terminal_mor S.
 
-(** Exisztenciális Kvantor (Exists): 
+(** Exisztenciális kvantor: 
     A Sigma funktor az (S -> 1) morfizmus mentén. 
     Ez a (Fiber S)-ből a (Fiber One)-ba visz. *)
 Definition ExistsQuantifier (B : Category) {GF : GoodFibration B} {TSC : TwoSortCategory B}
@@ -416,7 +355,7 @@ Proof.
  exact (Sigma_f (bang B TSC)). 
 Defined.
 
-(** Univerzális Kvantor (Forall): 
+(** Univerzális kvantor: 
     A Pi funktor az (S -> 1) morfizmus mentén. 
     Ez a (Fiber S)-ből a (Fiber One)-ba visz. *)
 Definition ForallQuantifier (B : Category) {GF : GoodFibration B} {TSC : TwoSortCategory B}
