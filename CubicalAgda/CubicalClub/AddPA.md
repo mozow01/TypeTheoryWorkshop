@@ -95,12 +95,6 @@ trunc : (x y : AddPA) -> (p q : x ≡ y) -> p ≡ q
 ## További fontos eszközök
 
 ```agda-fragment
-eq-add-zero x
-  : add zero x ≡ x
-
-eq-add-succ x y
-  : add (succ x) y ≡ succ (add x y)
-
 cong f p
   : f a ≡ f b
   -- ha p : a ≡ b
