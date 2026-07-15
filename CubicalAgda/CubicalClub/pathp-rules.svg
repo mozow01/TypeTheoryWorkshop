@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1040" height="590" viewBox="0 0 1040 590" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#4f46e5" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+      .small { font-size: 14px; }
+      .rule { font-size: 15px; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="590" fill="#ffffff" />
+
+  <rect x="46" y="34" width="948" height="66" rx="10" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="520" y="62" font-size="22" font-weight="700" text-anchor="middle" fill="#111827">
+    PathP A x y: függő út egy I-indexelt típuscsaládban
+  </text>
+  <text x="520" y="88" class="mono" font-size="16" text-anchor="middle" fill="#374151">
+    A : I → Type ℓ,   x : A i0,   y : A i1,   p : PathP A x y
+  </text>
+
+  <!-- Left geometric picture -->
+  <rect x="50" y="128" width="610" height="404" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2" />
+  <text x="355" y="157" font-size="18" font-weight="700" text-anchor="middle" fill="#3730a3">
+    Geometriai olvasat
+  </text>
+
+  <!-- Fibers -->
+  <line x1="145" y1="212" x2="145" y2="434" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+  <line x1="355" y1="212" x2="355" y2="434" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+  <line x1="565" y1="212" x2="565" y2="434" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+
+  <ellipse cx="145" cy="210" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <ellipse cx="355" cy="210" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <ellipse cx="565" cy="210" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <text x="145" y="216" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A i0</text>
+  <text x="355" y="216" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A r</text>
+  <text x="565" y="216" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A i1</text>
+
+  <!-- Dependent path -->
+  <path d="M 145 322 C 230 250, 435 250, 565 322" fill="none" stroke="#4f46e5" stroke-width="4" marker-end="url(#arrow)" />
+  <circle cx="145" cy="322" r="8" fill="#4f46e5" />
+  <circle cx="355" cy="277" r="8" fill="#7c3aed" />
+  <circle cx="565" cy="322" r="8" fill="#4f46e5" />
+
+  <text x="145" y="302" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#312e81">x</text>
+  <text x="355" y="257" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#5b21b6">p r</text>
+  <text x="565" y="302" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#312e81">y</text>
+  <text x="355" y="333" class="mono" font-size="18" font-weight="700" text-anchor="middle" fill="#4338ca">p i : A i</text>
+
+  <!-- Base interval -->
+  <line x1="110" y1="448" x2="600" y2="448" stroke="#10b981" stroke-width="4" />
+  <circle cx="145" cy="448" r="7" fill="#047857" />
+  <circle cx="355" cy="448" r="7" fill="#047857" />
+  <circle cx="565" cy="448" r="7" fill="#047857" />
+  <text x="145" y="476" class="mono" font-size="15" text-anchor="middle" fill="#065f46">i0</text>
+  <text x="355" y="476" class="mono" font-size="15" text-anchor="middle" fill="#065f46">r</text>
+  <text x="565" y="476" class="mono" font-size="15" text-anchor="middle" fill="#065f46">i1</text>
+  <text x="355" y="506" font-size="14" text-anchor="middle" fill="#475569">
+    a PathP term alkalmazható intervallumpontokra: p r : A r
+  </text>
+
+  <!-- Right rules panel -->
+  <rect x="690" y="128" width="304" height="404" rx="12" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="842" y="157" font-size="18" font-weight="700" text-anchor="middle" fill="#111827">
+    Szabályok
+  </text>
+
+  <text x="714" y="190" font-size="15" font-weight="700" fill="#374151">Formation</text>
+  <text x="714" y="214" class="mono rule" fill="#111827">A : I → Type ℓ</text>
+  <text x="714" y="234" class="mono rule" fill="#111827">x : A i0    y : A i1</text>
+  <line x1="714" y1="244" x2="962" y2="244" stroke="#9ca3af" />
+  <text x="714" y="267" class="mono rule" fill="#111827">PathP A x y : Type ℓ</text>
+
+  <text x="714" y="305" font-size="15" font-weight="700" fill="#374151">Introduction</text>
+  <text x="714" y="329" class="mono rule" fill="#111827">i : I ⊢ t : A i</text>
+  <line x1="714" y1="339" x2="962" y2="339" stroke="#9ca3af" />
+  <text x="714" y="362" class="mono rule" fill="#111827">λ i → t : PathP A</text>
+  <text x="730" y="382" class="mono rule" fill="#111827">(t[i0/i]) (t[i1/i])</text>
+
+  <text x="714" y="420" font-size="15" font-weight="700" fill="#374151">Elimination</text>
+  <text x="714" y="444" class="mono rule" fill="#111827">p : PathP A x y</text>
+  <text x="714" y="464" class="mono rule" fill="#111827">r : I</text>
+  <line x1="714" y1="474" x2="962" y2="474" stroke="#9ca3af" />
+  <text x="714" y="497" class="mono rule" fill="#111827">p r : A r</text>
+
+  <rect x="690" y="546" width="304" height="1" fill="#e5e7eb" />
+  <text x="68" y="560" class="mono" font-size="15" fill="#111827">
+    Computation:   (λ i → t) r ↦ t[r/i],     p i0 ↦ x,     p i1 ↦ y
+  </text>
+</svg>

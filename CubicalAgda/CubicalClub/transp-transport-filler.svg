@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1040" height="600" viewBox="0 0 1040 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#4f46e5" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#059669" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="600" fill="#ffffff" />
+
+  <rect x="46" y="34" width="948" height="70" rx="10" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="520" y="63" font-size="22" font-weight="700" text-anchor="middle" fill="#111827">
+    transp: 0-ból 1-be vivő primitív transport egy típuscsaládban
+  </text>
+  <text x="520" y="91" class="mono" font-size="16" text-anchor="middle" fill="#374151">
+    transp A φ a : A i1, ahol A : I → Type ℓ és a : A i0
+  </text>
+
+  <!-- Main transport picture -->
+  <rect x="48" y="130" width="618" height="348" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2" />
+  <text x="357" y="160" font-size="18" font-weight="700" text-anchor="middle" fill="#3730a3">
+    Endpoint transport és filler
+  </text>
+
+  <line x1="142" y1="218" x2="142" y2="386" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+  <line x1="357" y1="218" x2="357" y2="386" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+  <line x1="572" y1="218" x2="572" y2="386" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 6" />
+
+  <ellipse cx="142" cy="215" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <ellipse cx="357" cy="215" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <ellipse cx="572" cy="215" rx="82" ry="28" fill="#ffffff" stroke="#818cf8" stroke-width="2" filter="url(#softShadow)" />
+  <text x="142" y="221" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A i0</text>
+  <text x="357" y="221" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A r</text>
+  <text x="572" y="221" class="mono" font-size="16" text-anchor="middle" fill="#312e81">A i1</text>
+
+  <circle cx="142" cy="312" r="8" fill="#4f46e5" />
+  <circle cx="572" cy="312" r="8" fill="#4f46e5" />
+  <path d="M 153 312 C 255 255, 460 255, 561 312" fill="none" stroke="#4f46e5" stroke-width="4" marker-end="url(#arrowBlue)" />
+  <text x="142" y="292" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#312e81">a</text>
+  <text x="572" y="292" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#312e81">transp A φ a</text>
+
+  <circle cx="357" cy="268" r="7" fill="#7c3aed" />
+  <text x="357" y="250" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#5b21b6">q r</text>
+  <text x="357" y="335" class="mono" font-size="16" text-anchor="middle" fill="#4338ca">
+    transport-filler adja a teljes q r : A r családot
+  </text>
+
+  <line x1="105" y1="410" x2="610" y2="410" stroke="#10b981" stroke-width="4" />
+  <circle cx="142" cy="410" r="7" fill="#047857" />
+  <circle cx="357" cy="410" r="7" fill="#047857" />
+  <circle cx="572" cy="410" r="7" fill="#047857" />
+  <text x="142" y="438" class="mono" font-size="15" text-anchor="middle" fill="#065f46">i0</text>
+  <text x="357" y="438" class="mono" font-size="15" text-anchor="middle" fill="#065f46">r</text>
+  <text x="572" y="438" class="mono" font-size="15" text-anchor="middle" fill="#065f46">i1</text>
+
+  <!-- Side condition panel -->
+  <rect x="696" y="130" width="298" height="348" rx="12" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="845" y="160" font-size="18" font-weight="700" text-anchor="middle" fill="#111827">
+    A φ paraméter
+  </text>
+  <text x="720" y="198" class="mono" font-size="15" fill="#111827">φ = i0</text>
+  <text x="720" y="220" font-size="14" fill="#374151">nincs constancy feltétel</text>
+  <text x="720" y="242" font-size="14" fill="#374151">általános transport</text>
+
+  <line x1="720" y1="268" x2="970" y2="268" stroke="#e5e7eb" />
+  <text x="720" y="300" class="mono" font-size="15" fill="#111827">φ = i1</text>
+  <text x="720" y="322" font-size="14" fill="#374151">A konstans ezen a face-en</text>
+  <text x="720" y="344" class="mono" font-size="14" fill="#111827">transp A i1 a ↦ a</text>
+
+  <line x1="720" y1="370" x2="970" y2="370" stroke="#e5e7eb" />
+  <text x="720" y="402" class="mono" font-size="15" fill="#111827">φ = k</text>
+  <text x="720" y="424" font-size="14" fill="#374151">A csak akkor kell konstans legyen,</text>
+  <text x="720" y="444" font-size="14" fill="#374151">amikor k = i1</text>
+
+  <rect x="70" y="506" width="900" height="56" rx="9" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="92" y="529" class="mono" font-size="15" fill="#111827">
+    transport p a = transp (λ i → p i) i0 a
+  </text>
+  <text x="92" y="550" class="mono" font-size="15" fill="#111827">
+    transport-filler p a r = transp (λ j → p (r ∧ j)) (~ r) a
+  </text>
+</svg>
