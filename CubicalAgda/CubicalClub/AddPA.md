@@ -486,6 +486,12 @@ assoc-add (eq-add-zero x i) y z =
     i
 ```
 
+A helyzet képe:
+
+<p align="center">
+  <img src="assoc-add-eq-zero.svg" width="760" alt="assoc-add proof over the eq-add-zero path" />
+</p>
+
 Behelyettesítés az `isProp→PathP` ábrába:
 
 ```text
