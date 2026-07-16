@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1080" height="760" viewBox="0 0 1080 760" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#4f46e5" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#059669" />
+    </marker>
+    <marker id="arrowGray" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#6b7280" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="760" fill="#ffffff" />
+
+  <rect x="54" y="34" width="972" height="92" rx="12" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="540" y="67" font-size="22" font-weight="700" text-anchor="middle" fill="#111827">
+    Az assoc-add trunc esete: négyzet fölött négyzetet töltünk
+  </text>
+  <text x="540" y="101" class="mono" font-size="18" text-anchor="middle" fill="#374151">
+    H i j = trunc x y p q i j      B i j = assoc-bizonyitasok tipusa H i j-ben
+  </text>
+
+  <!-- Left panel: base square in AddPA -->
+  <rect x="58" y="165" width="420" height="330" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="2" filter="url(#softShadow)" />
+  <text x="268" y="200" font-size="19" font-weight="700" text-anchor="middle" fill="#065f46">
+    Alapnégyzet AddPA-ban
+  </text>
+  <text x="268" y="228" class="mono" font-size="16" text-anchor="middle" fill="#047857">
+    H i j = trunc x y p q i j
+  </text>
+
+  <rect x="124" y="270" width="288" height="160" rx="8" fill="#ffffff" stroke="#d1fae5" stroke-width="2" />
+  <path d="M 154 302 L 382 302" fill="none" stroke="#4f46e5" stroke-width="4" marker-end="url(#arrowBlue)" />
+  <path d="M 154 398 L 382 398" fill="none" stroke="#059669" stroke-width="4" marker-end="url(#arrowGreen)" />
+  <path d="M 154 302 L 154 398" fill="none" stroke="#6b7280" stroke-width="2.8" stroke-dasharray="6 4" />
+  <path d="M 382 302 L 382 398" fill="none" stroke="#6b7280" stroke-width="2.8" stroke-dasharray="6 4" />
+
+  <circle cx="154" cy="302" r="6" fill="#111827" />
+  <circle cx="382" cy="302" r="6" fill="#111827" />
+  <circle cx="154" cy="398" r="6" fill="#111827" />
+  <circle cx="382" cy="398" r="6" fill="#111827" />
+
+  <text x="140" y="289" class="mono" font-size="17" font-weight="700" text-anchor="end" fill="#111827">x</text>
+  <text x="397" y="289" class="mono" font-size="17" font-weight="700" fill="#111827">y</text>
+  <text x="140" y="423" class="mono" font-size="17" font-weight="700" text-anchor="end" fill="#111827">x</text>
+  <text x="397" y="423" class="mono" font-size="17" font-weight="700" fill="#111827">y</text>
+
+  <text x="268" y="289" class="mono" font-size="17" font-weight="700" text-anchor="middle" fill="#4338ca">p j</text>
+  <text x="268" y="425" class="mono" font-size="17" font-weight="700" text-anchor="middle" fill="#047857">q j</text>
+  <text x="112" y="355" class="mono" font-size="14" text-anchor="middle" fill="#6b7280" transform="rotate(-90 112 355)">const x</text>
+  <text x="424" y="355" class="mono" font-size="14" text-anchor="middle" fill="#6b7280" transform="rotate(90 424 355)">const y</text>
+
+  <rect x="185" y="333" width="166" height="34" rx="8" fill="#ecfdf5" stroke="#a7f3d0" />
+  <text x="268" y="356" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#065f46">H i j</text>
+
+  <text x="268" y="466" font-size="14" text-anchor="middle" fill="#374151">
+    trunc azt mondja: p és q ugyanaz az x-ből y-ba menő út
+  </text>
+
+  <!-- Middle arrow -->
+  <path d="M 500 330 L 580 330" fill="none" stroke="#6b7280" stroke-width="2.6" marker-end="url(#arrowGray)" />
+  <text x="540" y="313" font-size="14" text-anchor="middle" fill="#6b7280">P felette</text>
+  <text x="540" y="358" class="mono" font-size="14" text-anchor="middle" fill="#6b7280">B i j</text>
+
+  <!-- Right panel: proof square over the base square -->
+  <rect x="602" y="165" width="420" height="330" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2" filter="url(#softShadow)" />
+  <text x="812" y="200" font-size="19" font-weight="700" text-anchor="middle" fill="#4338ca">
+    Bizonyításnégyzet a szálakban
+  </text>
+  <text x="812" y="228" class="mono" font-size="16" text-anchor="middle" fill="#4f46e5">
+    K i j : B i j
+  </text>
+
+  <rect x="658" y="270" width="308" height="160" rx="8" fill="#ffffff" stroke="#ddd6fe" stroke-width="2" />
+  <path d="M 688 302 L 936 302" fill="none" stroke="#4f46e5" stroke-width="4" marker-end="url(#arrowBlue)" />
+  <path d="M 688 398 L 936 398" fill="none" stroke="#059669" stroke-width="4" marker-end="url(#arrowGreen)" />
+  <path d="M 688 302 L 688 398" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 4" />
+  <path d="M 936 302 L 936 398" fill="none" stroke="#7c3aed" stroke-width="3" stroke-dasharray="6 4" />
+
+  <rect x="695" y="253" width="234" height="33" rx="7" fill="#ffffff" stroke="#e0e7ff" />
+  <text x="812" y="275" class="mono" font-size="13" text-anchor="middle" fill="#4338ca">λ j -> assoc-add (p j) z w</text>
+
+  <rect x="695" y="414" width="234" height="33" rx="7" fill="#ffffff" stroke="#dcfce7" />
+  <text x="812" y="436" class="mono" font-size="13" text-anchor="middle" fill="#047857">λ j -> assoc-add (q j) z w</text>
+
+  <text x="645" y="355" class="mono" font-size="12" text-anchor="middle" fill="#6d28d9" transform="rotate(-90 645 355)">λ i -> f (H i i0)</text>
+  <text x="979" y="355" class="mono" font-size="12" text-anchor="middle" fill="#6d28d9" transform="rotate(90 979 355)">λ i -> f (H i i1)</text>
+
+  <rect x="715" y="332" width="194" height="36" rx="8" fill="#f5f3ff" stroke="#c4b5fd" />
+  <text x="812" y="355" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#5b21b6">isSet→SquareP</text>
+
+  <text x="812" y="466" font-size="14" text-anchor="middle" fill="#374151">
+    a négy határ már adott; a belsőt a set-ség tölti ki
+  </text>
+
+  <!-- Bottom formula strip -->
+  <rect x="58" y="535" width="964" height="166" rx="12" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="84" y="568" class="mono" font-size="16" fill="#111827">B i j =</text>
+  <text x="158" y="568" class="mono" font-size="16" fill="#111827">add (add (H i j) z) w ≡ add (H i j) (add z w)</text>
+
+  <text x="84" y="608" class="mono" font-size="16" fill="#111827">h i j :</text>
+  <text x="158" y="608" class="mono" font-size="16" fill="#111827">isSet (B i j)</text>
+  <text x="346" y="608" font-size="15" fill="#6b7280">mert</text>
+  <text x="392" y="608" class="mono" font-size="16" fill="#111827">assoc-add-isProp (H i j) z w</text>
+  <text x="682" y="608" font-size="15" fill="#6b7280">és</text>
+  <text x="718" y="608" class="mono" font-size="16" fill="#111827">isProp→isSet</text>
+
+  <text x="84" y="649" class="mono" font-size="16" fill="#111827">K i j :</text>
+  <text x="158" y="649" class="mono" font-size="16" fill="#111827">B i j</text>
+  <text x="236" y="649" font-size="15" fill="#6b7280">ahol a négy oldal:</text>
+  <text x="402" y="649" class="mono" font-size="15" fill="#4338ca">f ∘ p</text>
+  <text x="466" y="649" class="mono" font-size="15" fill="#047857">f ∘ q</text>
+  <text x="530" y="649" class="mono" font-size="15" fill="#6d28d9">const x fölött</text>
+  <text x="662" y="649" class="mono" font-size="15" fill="#6d28d9">const y fölött</text>
+
+  <text x="540" y="684" class="mono" font-size="14" text-anchor="middle" fill="#374151">
+    f a = assoc-add a z w      H i i0 = x      H i i1 = y
+  </text>
+</svg>

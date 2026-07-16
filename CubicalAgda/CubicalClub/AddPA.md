@@ -62,6 +62,9 @@ module AddPA where
 open import Cubical.Foundations.Prelude
 open import Cubical.Foundations.HLevels
 
+import Cubical.Data.Nat.Base as Nat
+import Cubical.Data.Nat.Properties as NatProp
+
 data AddPA : Type where
   zero : AddPA
   succ : AddPA -> AddPA
@@ -522,6 +525,12 @@ assoc-add (eq-add-succ x y i) z w =
     i
 ```
 
+A helyzet képe:
+
+<p align="center">
+  <img src="assoc-add-eq-succ.svg" width="760" alt="assoc-add proof over the eq-add-succ path" />
+</p>
+
 Behelyettesítés az `isProp→PathP` ábrába:
 
 ```text
@@ -547,6 +556,12 @@ assoc-add (trunc x y p q i j) z w =
     (λ i -> assoc-add (trunc x y p q i i1) z w)
     i j
 ```
+
+A helyzet képe:
+
+<p align="center">
+  <img src="assoc-add-trunc.svg" width="760" alt="assoc-add proof square over the trunc constructor" />
+</p>
 
 Behelyettesítés a `trunc` ábrába:
 
@@ -629,10 +644,158 @@ mert az add-eset rekurzív hívásait a terminációellenőrző nem ismeri fel
 egyszerű strukturális csökkenésként.
 ```
 
-## Házi
+## Házi: normalizáció helyessége
+
+A cél az, hogy az asszociativitás után ugyanazt az indukciós gépet egy másik, tartalmas állításon működtessük.
+
+```text
+Nem külön fájlra hivatkozunk: minden szükséges definíció itt van.
+```
+
+### Normalizáció és visszaágyazás
 
 ```agda-fragment
-add-zero-right : (x : AddPA) -> add x zero ≡ x
+norm : AddPA -> Nat.ℕ
+norm zero =
+  Nat.zero
+
+norm (succ x) =
+  Nat.suc (norm x)
+
+norm (add x y) =
+  norm x Nat.+ norm y
+
+norm (eq-add-zero x i) =
+  norm x
+
+norm (eq-add-succ x y i) =
+  Nat.suc (norm x Nat.+ norm y)
+
+norm (trunc x y p q i j) =
+  NatProp.isSetℕ
+    (norm x)
+    (norm y)
+    (cong norm p)
+    (cong norm q)
+    i j
+```
+
+```agda-fragment
+embed : Nat.ℕ -> AddPA
+embed Nat.zero =
+  zero
+
+embed (Nat.suc n) =
+  succ (embed n)
+```
+
+### Segédlemma
+
+Ez kell majd az `add` pontkonstruktoros esethez:
+
+```agda-fragment
+embed-add :
+  (m n : Nat.ℕ) ->
+  embed (m Nat.+ n) ≡ add (embed m) (embed n)
+
+embed-add Nat.zero n =
+  {!!}
+
+embed-add (Nat.suc m) n =
+  {!!}
+```
+
+### A fő állítás
+
+```agda-fragment
+SoundP : AddPA -> Type
+SoundP x =
+  embed (norm x) ≡ x
+```
+
+Mivel `AddPA` set, ez minden pontban proposition:
+
+```agda-fragment
+SoundP-isProp :
+  (x : AddPA) ->
+  isProp (SoundP x)
+SoundP-isProp x =
+  trunc (embed (norm x)) x
+```
+
+A path-konstruktoros ágakhoz kényelmes függő proof-irrelevance:
+
+```agda-fragment
+SoundP-isPropDep : isPropDep SoundP
+SoundP-isPropDep p q r =
+  isProp→PathP
+    (λ i -> SoundP-isProp (r i))
+    p
+    q
+```
+
+Most jön a házi fő része:
+
+```agda-fragment
+sound :
+  (x : AddPA) ->
+  embed (norm x) ≡ x
+
+sound zero =
+  {!!}
+
+sound (succ x) =
+  {!!}
+
+sound (add x y) =
+  {!!}
+
+sound (eq-add-zero x i) =
+  SoundP-isPropDep
+    {!!}
+    {!!}
+    (eq-add-zero x)
+    i
+
+sound (eq-add-succ x y i) =
+  SoundP-isPropDep
+    {!!}
+    {!!}
+    (eq-add-succ x y)
+    i
+
+sound (trunc x y p q i j) =
+  isPropDep→isSetDep'
+    SoundP-isPropDep
+    (trunc x y p q)
+    (cong sound p)
+    (cong sound q)
+    (λ _ -> sound x)
+    (λ _ -> sound y)
+    i j
+```
+
+Olvasat:
+
+```text
+sound x azt mondja, hogy x egyenlő a saját normál alakjával.
+path-konstruktoroknál függő út kell.
+trunc-konstruktornál függő négyzet kell.
+```
+
+### Következmény
+
+Ha a `sound` kész, ebből már kijön a jobb oldali nulla:
+
+```agda-fragment
+add-zero-right :
+  (x : AddPA) ->
+  add x zero ≡ x
+
+add-zero-right x =
+  sym (sound (add x zero))
+  ∙ cong embed (NatProp.+-zero (norm x))
+  ∙ sound x
 ```
 
 ## Hibák olvasása

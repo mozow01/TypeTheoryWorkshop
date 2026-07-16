@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1040" height="680" viewBox="0 0 1040 680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#4f46e5" />
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#059669" />
+    </marker>
+    <marker id="arrowGray" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 8 3 L 0 6 Z" fill="#6b7280" />
+    </marker>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#111827" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      text { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="680" fill="#ffffff" />
+
+  <rect x="58" y="34" width="924" height="88" rx="12" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="520" y="66" font-size="22" font-weight="700" text-anchor="middle" fill="#111827">
+    Az eq-add-succ x y út mentén a bizonyítások típusa is mozog
+  </text>
+  <text x="520" y="99" class="mono" font-size="18" text-anchor="middle" fill="#374151">
+    r i = eq-add-succ x y i      B i = L i ≡ R i
+  </text>
+
+  <!-- Base path r i -->
+  <path d="M 150 166 C 304 119, 736 119, 890 166" fill="none" stroke="#10b981" stroke-width="4" />
+  <circle cx="150" cy="166" r="7" fill="#047857" />
+  <circle cx="890" cy="166" r="7" fill="#047857" />
+  <text x="150" y="145" class="mono" font-size="17" font-weight="700" text-anchor="middle" fill="#065f46">r i0</text>
+  <text x="150" y="191" class="mono" font-size="15" text-anchor="middle" fill="#065f46">add (succ x) y</text>
+  <text x="890" y="145" class="mono" font-size="17" font-weight="700" text-anchor="middle" fill="#065f46">r i1</text>
+  <text x="890" y="191" class="mono" font-size="15" text-anchor="middle" fill="#065f46">succ (add x y)</text>
+  <text x="520" y="147" class="mono" font-size="18" font-weight="700" text-anchor="middle" fill="#059669">r i</text>
+  <text x="520" y="187" font-size="15" text-anchor="middle" fill="#64748b">
+    ez a HIT path konstruktor által adott alapút
+  </text>
+
+  <!-- Moving equality family -->
+  <path d="M 94 250 C 220 210, 820 210, 946 250 C 988 322, 988 430, 946 502 C 820 542, 220 542, 94 502 C 52 430, 52 322, 94 250 Z"
+        fill="#eef2ff" stroke="#c7d2fe" stroke-width="2" stroke-dasharray="8 5" />
+  <text x="520" y="240" font-size="18" font-weight="700" text-anchor="middle" fill="#4338ca">
+    PathP B p0 p1: függő út a két endpoint-bizonyítás között
+  </text>
+
+  <!-- Node boxes -->
+  <rect x="58" y="270" width="404" height="66" rx="9" fill="#ffffff" stroke="#dbeafe" stroke-width="2" filter="url(#softShadow)" />
+  <rect x="578" y="270" width="404" height="66" rx="9" fill="#ffffff" stroke="#dbeafe" stroke-width="2" filter="url(#softShadow)" />
+  <rect x="58" y="372" width="404" height="66" rx="9" fill="#ffffff" stroke="#ddd6fe" stroke-width="2" filter="url(#softShadow)" />
+  <rect x="578" y="372" width="404" height="66" rx="9" fill="#ffffff" stroke="#ddd6fe" stroke-width="2" filter="url(#softShadow)" />
+  <rect x="58" y="474" width="404" height="66" rx="9" fill="#ffffff" stroke="#dbeafe" stroke-width="2" filter="url(#softShadow)" />
+  <rect x="578" y="474" width="404" height="66" rx="9" fill="#ffffff" stroke="#dbeafe" stroke-width="2" filter="url(#softShadow)" />
+
+  <!-- Horizontal proof paths -->
+  <path d="M 474 303 L 566 303" fill="none" stroke="#4f46e5" stroke-width="3.5" marker-end="url(#arrowBlue)" />
+  <path d="M 474 405 L 566 405" fill="none" stroke="#7c3aed" stroke-width="3.5" stroke-dasharray="7 5" marker-end="url(#arrowBlue)" />
+  <path d="M 474 507 L 566 507" fill="none" stroke="#4f46e5" stroke-width="3.5" marker-end="url(#arrowBlue)" />
+
+  <!-- Vertical motion induced by r i under the two contexts -->
+  <path d="M 260 342 L 260 365" fill="none" stroke="#059669" stroke-width="3" marker-end="url(#arrowGreen)" />
+  <path d="M 260 444 L 260 467" fill="none" stroke="#059669" stroke-width="3" marker-end="url(#arrowGreen)" />
+  <path d="M 780 342 L 780 365" fill="none" stroke="#059669" stroke-width="3" marker-end="url(#arrowGreen)" />
+  <path d="M 780 444 L 780 467" fill="none" stroke="#059669" stroke-width="3" marker-end="url(#arrowGreen)" />
+
+  <!-- Labels in boxes -->
+  <text x="260" y="292" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#1e40af">L i0</text>
+  <text x="260" y="318" class="mono" font-size="14" text-anchor="middle" fill="#111827">add (add (add (succ x) y) z) w</text>
+
+  <text x="780" y="292" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#1e40af">R i0</text>
+  <text x="780" y="318" class="mono" font-size="14" text-anchor="middle" fill="#111827">add (add (succ x) y) (add z w)</text>
+
+  <text x="260" y="394" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#5b21b6">L i</text>
+  <text x="260" y="420" class="mono" font-size="15" text-anchor="middle" fill="#111827">add (add (r i) z) w</text>
+
+  <text x="780" y="394" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#5b21b6">R i</text>
+  <text x="780" y="420" class="mono" font-size="15" text-anchor="middle" fill="#111827">add (r i) (add z w)</text>
+
+  <text x="260" y="496" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#1e40af">L i1</text>
+  <text x="260" y="522" class="mono" font-size="14" text-anchor="middle" fill="#111827">add (add (succ (add x y)) z) w</text>
+
+  <text x="780" y="496" class="mono" font-size="15" font-weight="700" text-anchor="middle" fill="#1e40af">R i1</text>
+  <text x="780" y="522" class="mono" font-size="14" text-anchor="middle" fill="#111827">add (succ (add x y)) (add z w)</text>
+
+  <text x="520" y="289" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#4338ca">p0</text>
+  <text x="520" y="391" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#6d28d9">b i</text>
+  <text x="520" y="493" class="mono" font-size="16" font-weight="700" text-anchor="middle" fill="#4338ca">p1</text>
+
+  <text x="88" y="362" class="mono" font-size="14" text-anchor="start" fill="#047857">L i = add (add (r i) z) w</text>
+  <text x="608" y="362" class="mono" font-size="14" text-anchor="start" fill="#047857">R i = add (r i) (add z w)</text>
+
+  <!-- Transport mechanism -->
+  <rect x="74" y="582" width="892" height="62" rx="10" fill="#f8fafc" stroke="#e5e7eb" />
+  <text x="101" y="606" class="mono" font-size="15" fill="#111827">p0 : B i0</text>
+  <path d="M 205 602 L 343 602" fill="none" stroke="#6b7280" stroke-width="2.4" marker-end="url(#arrowGray)" />
+  <text x="274" y="593" font-size="13" text-anchor="middle" fill="#6b7280">transport B</text>
+  <text x="371" y="606" class="mono" font-size="15" fill="#111827">transport B p0 : B i1</text>
+  <path d="M 581 602 L 708 602" fill="none" stroke="#6b7280" stroke-width="2.4" stroke-dasharray="6 4" marker-end="url(#arrowGray)" />
+  <text x="645" y="593" font-size="13" text-anchor="middle" fill="#6b7280">isProp (B i1)</text>
+  <text x="736" y="606" class="mono" font-size="15" fill="#111827">p1 : B i1</text>
+  <text x="520" y="632" class="mono" font-size="14" text-anchor="middle" fill="#374151">
+    isProp→PathP hB p0 p1 = toPathP (hB i1 (transport B p0) p1)
+  </text>
+</svg>

@@ -1,0 +1,4 @@
+name: cubical-playground
+depend: cubical
+include: src
+flags: --cubical --guardedness
